@@ -1,10 +1,17 @@
+import React from 'react'
 import { useState } from 'react'
-import './App.css'
+import {Routes, Route} from 'react-router-dom'
+import Login from './Components/login'
 
 function App() {
 
   return (
-    <h1 className="text-3xl font-bold underline">Hello World</h1>
+    <React.Fragment>
+    <Routes>
+      <Route path = '/' element={<Login />}/>
+      
+    </Routes>
+  </React.Fragment>
   )
 }
 

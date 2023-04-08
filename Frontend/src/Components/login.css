@@ -1,7 +1,34 @@
 #LogFlex{
     align-items: center;
     height: 100vh;
-    background-image: url(Assets/login.jpeg);
-    background: no-repeat;
+    background-image: url(Assets/login-bg.jpg);
     background-size: 100% 100%;
+}
+#LogForm{
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0px 5px 19px black;
+}
+#Loginput:focus{
+    outline-color: 7px black;
+    background-color: white;
+}
+#LogButton:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    transform: scale(1.2);
+}
+#GoogleLog:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    trasnform: scale(1.1);
+    transition: all 0.3s;
+}
+#GoogleLog:hover img{
+    background-color: black;
+    opacity: 0%;
+    transition: 0.1s;
 }

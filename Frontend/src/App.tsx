@@ -3,6 +3,8 @@ import { useState } from 'react'
 import {Routes, Route} from 'react-router-dom'
 import Login from './Components/login'
 import HomePage from './Components/HomePage'
+import SignUp from './Components/signup'
+import Home from './Components/Homepage'
 
 function App() {
 
@@ -11,6 +13,9 @@ function App() {
     <Routes>
       <Route path = '/' element={<Login />}/>
       <Route path = '/home' element={<HomePage />}/>
+      <Route path = '/Signup' element={<SignUp />}/>
+      <Route path = '/Movie' element={<Home />}/>
+      
     </Routes>
   </React.Fragment>
   )

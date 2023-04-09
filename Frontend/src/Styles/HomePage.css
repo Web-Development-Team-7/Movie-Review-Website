@@ -1,0 +1,31 @@
+h1{
+    /* top: 2000px; */
+    color:blue;
+    text-align: center;
+
+}
+#moviecontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  li {
+    display: inline-block;
+    list-style-type: none;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100px;
+    margin: 10px;
+    text-align: center;
+  }
+  .pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;  
+  }

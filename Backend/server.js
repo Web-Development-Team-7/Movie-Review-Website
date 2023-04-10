@@ -36,9 +36,32 @@ const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
   },
 });
 const movies = response.data.results.slice(0, 50);
-console.log(movies)
+//console.log(movies)
 }
-getTop50()
+//getTop50()
+
+
+
+const request = require('request');
+
+const MOVIEDB_API_KEY = '5e072d084652ab8ef66bf80de30d4235';
+const MOVIE_ID = 505642; // Replace with the ID of the movie you want to get the actors for
+
+// Make a GET request to the moviedb API to get the cast details for the movie
+request.get(`https://api.themoviedb.org/3/movie/${MOVIE_ID}/credits?api_key=${MOVIEDB_API_KEY}`, (error, response, body) => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const data = JSON.parse(body);
+
+  // Extract the list of actors from the API response
+  const actors = data.cast.map(actor => actor.name);
+
+  // Log the list of actors to the console
+  console.log(`Actors in the movie: ${actors.join(', ')}`);
+});
 
 // axios.get(`http://www.omdbapi.com/?i=tt0031885&apikey=a502ab9b`)
 //   .then(response => {

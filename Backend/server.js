@@ -76,29 +76,29 @@ axios.request(options).then(function (response) {
   // getMovieData(550) // replace with the movie ID you want to fetch
   //   .then(data => console.log(data))
   //   .catch(error => console.error(error));
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-}));
+// app.use(cors({
+//     origin: 'http://localhost:3000',
+//     credentials: true
+// }));
 
 
 
-const options = {
-    method: 'GET',
-    url: 'https://online-movie-database.p.rapidapi.com/auto-complete',
-    params: { q: 'mario', qid: 'movie' },
-    headers: {
-        'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
-        'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
-    }
-};
+// const options = {
+//     method: 'GET',
+//     url: 'https://online-movie-database.p.rapidapi.com/auto-complete',
+//     params: { q: 'mario', qid: 'movie' },
+//     headers: {
+//         'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+//         'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
+//     }
+// };
 
 // const filteredData = response.data.filter(obj => obj.qid === 'movie');
 
 // console.log(filteredData);
 
 axios.request(options).then(function (response) {
-    //console.log(response.data);
+    // console.log(response.data);
     let data = response.data;
     const filteredData = data.d.filter(obj => obj.qid === 'movie');
 

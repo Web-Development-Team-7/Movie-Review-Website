@@ -23,7 +23,7 @@ export default function Login(){
                 //If the user does exist, set the users name in the storage to verify a user is logged in.
                 localStorage.setItem("user", user);
                 //Navigate to home page.
-                nav('/Movie');
+                nav('/home');
             }     
         }).catch((error) =>{
             alert("Error!");
@@ -41,7 +41,7 @@ export default function Login(){
         //Otherwise, same function as above.
         signInWithEmailAndPassword(auth, email, password).then((userCredentials) =>{
             localStorage.setItem("user", email);
-            nav('/Movie');
+            nav('/home');
         }).catch((error) => {
             alert("Error!")
         })

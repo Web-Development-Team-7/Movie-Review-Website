@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import {Routes, Route} from 'react-router-dom'
 import Login from './Components/login'
-import HomePage from './Components/HomePage'
+import HomePage from './Components/Homepage'
 import SignUp from './Components/signup'
 
 function App() {

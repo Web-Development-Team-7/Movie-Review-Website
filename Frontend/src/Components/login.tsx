@@ -14,6 +14,7 @@ export default function Login(){
     
     //Sign in with google authentication
     const GoogleSignIn = () =>{
+        event?.preventDefault();
         //Open a pop up tab that allows users to sign in with user accounts
         signInWithPopup(auth, provider).then((res) =>{
             //Use the google account displayName as the account name.
@@ -50,7 +51,6 @@ export default function Login(){
     return(
         <React.Fragment>
            <div className='flex justify-center w-full' id = "LogFlex">
-
             <form className='bg-white flex relative rounded-md border-solid border-2 w-1/3 border-black h-4/5' id="LogForm">
                 <h1 className="text-3xl font-bold mt-10">Welcome</h1>
                 <p className="text-2xl font-medium mt-10">Log In</p>

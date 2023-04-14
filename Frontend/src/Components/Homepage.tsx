@@ -55,7 +55,7 @@ let HomePage = () => {
   
   return (
 <React.Fragment>
-  <h1>Home Mar</h1>
+  <h1>Home Lmar</h1>
 
   <div id='moviecontainer'>
     <ul>

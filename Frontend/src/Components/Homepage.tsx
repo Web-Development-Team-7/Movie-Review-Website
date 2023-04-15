@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import '../Styles/HomePage.css';
 import axios from 'axios'
+import Navbar from './navbar';
 
 interface Movie {
   adult: boolean;
@@ -60,7 +61,7 @@ let HomePage = () => {
   
   return (
 <React.Fragment>
-  <h1>Home Lmar</h1>
+  <Navbar/>
 
   <div id='moviecontainer'>
     <ul>

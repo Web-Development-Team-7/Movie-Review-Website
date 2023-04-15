@@ -100,7 +100,27 @@ const movies = response.data.results.slice(0, 50);
     War             10752
     Western         37
      */
-
+    app.get('/movies/:query', (req, res) => {
+      const options = {
+        method: 'GET',
+        url: 'https://advanced-movie-search.p.rapidapi.com/search/movie',
+        params: {query: req.params.query, page: '1'},
+        headers: {
+          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+          'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
+        }
+      };
+    
+      axios.request(options)
+        .then(response => {
+          res.send(response.data);
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error(error);
+          res.status(500).send('Server Error');
+        });
+    });
 
 
 

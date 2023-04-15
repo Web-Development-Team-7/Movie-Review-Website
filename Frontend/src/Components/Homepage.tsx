@@ -23,6 +23,7 @@ let HomePage = () => {
   
   const [currentPage, setCurrentPage] = useState(1);
   const [topMovie, setTopMovie]=useState<Movie[]>([]);
+  //const[genre, setGenre] = useState([]);
   const itemsPerPage = 5;
   
   const totalPages = Math.ceil(topMovie.length / itemsPerPage);
@@ -39,15 +40,19 @@ let HomePage = () => {
       const response = await axios.get('http://localhost:5678/getTop');
       await setTopMovie(response.data);
       console.log(topMovie); // logs the updated state
-      // console.log(response.data); 
+      console.log(response.data); 
     } catch (error) {
       console.log(error);
     }
   };
 
+  
+
   useEffect(() => {
     getTop();
   }, []);
+
+  
   
   useEffect(() => {
     console.log(topMovie);

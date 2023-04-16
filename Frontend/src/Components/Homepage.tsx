@@ -39,6 +39,7 @@ let HomePage = () => {
   const getTop = async () => {
     try {
       const response = await axios.get('http://localhost:5678/getTop');
+      console.log(response.data)
       await setTopMovie(response.data);
       console.log(topMovie); // logs the updated state
       console.log(response.data); 

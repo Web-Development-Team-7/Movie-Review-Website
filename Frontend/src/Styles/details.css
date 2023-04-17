@@ -14,8 +14,8 @@
 }
 
 .comment-section {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -26,8 +26,4 @@
   padding: 20px;
   box-sizing: border-box;
   transition: all 0.3s ease;
-}
-
-body {
-
 }

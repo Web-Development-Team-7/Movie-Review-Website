@@ -22,17 +22,17 @@ export default function MoviePage() {
             <Navbar/>
             
             <body>
-                <section className="details">
-                    <img src={movieDetails.backdrop_path} alt={movieDetails.title} />
-                    <section className='info'>    
-                        <Name/>
-                        <Ratings/>
-                        <ActorList/>
-                        <Genres/>
-                        <Synopsis/>
-                    </section>
+            <section className="details">
+                <img src={movieDetails.backdrop_path} alt={movieDetails.title} />
+                <section className='info'>    
+                    <Name/>
+                    <Ratings/>
+                    <ActorList/>
+                    <Genres/>
+                    <Synopsis/>
                 </section>
-                <Comments/>
+            </section>
+            <Comments/>
             </body>
         </React.Fragment>
     )

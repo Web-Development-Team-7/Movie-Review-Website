@@ -2,19 +2,32 @@ import React from "react";
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { getAuth, signOut } from "firebase/auth"
+import {useNavigate} from 'react-router-dom'
 
 const navigation = [
   { name: 'Home', href: '/home', current: true },
-  { name: 'Account', href: '#', current: false },
+  { name: 'Account', href: '/account', current: false },
   { name: 'Favorite', href: '#', current: false },
   { name: 'Tags', href: '#', current: false },
 ]
 
-function classNames(...classes) {
+
+function classNames(...classes : Array<Object>) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
+  const nav = useNavigate();
+  const auth = getAuth();
+  function LogOut(){
+    signOut(auth).then(() => {
+        localStorage.clear();
+        nav('/');
+     }).catch((error) => {
+        alert("An Error Has Occured!");
+    });
+}
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -88,17 +101,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="/"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Log in
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
+                            onClick={LogOut}
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Log out

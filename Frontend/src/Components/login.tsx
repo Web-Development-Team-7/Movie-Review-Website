@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Styles/login.css'
 import './styles/login.css'
 import {useState} from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword  } from 'firebase/auth';
@@ -19,10 +18,12 @@ export default function Login(){
         signInWithPopup(auth, provider).then((res) =>{
             //Use the google account displayName as the account name.
             const user = res.user.displayName;
+            const profile = res.user.photoURL;
             //If statement exists because typescript is unsure if user is null or not
-            if(user){
+            if(user && profile){
                 //If the user does exist, set the users name in the storage to verify a user is logged in.
                 localStorage.setItem("user", user);
+                localStorage.setItem("photo", profile);
                 //Navigate to home page.
                 nav('/home');
             }     

@@ -23,7 +23,7 @@ export default function AccountPage(){
         <div>
         <Navbar></Navbar>
         <div className = 'h-screen justify-center flex'>
-            <img alt="User Profile Picture" src={photoURL} className='h-1/4 mt-10 w-2/12 relative'/>
+            <img alt="User Profile Picture" src={photoURL || 'Assets/pfp.png'} className='h-1/4 mt-10 w-2/12 relative'/>
             <button className = "mt-96 bg-blue-500 h-10 w-1/12 text-center rounded-lg border-solid border-black border text-black text-lg font-400 fixed" 
             onClick={LogOut}>Logout</button>
         </div>

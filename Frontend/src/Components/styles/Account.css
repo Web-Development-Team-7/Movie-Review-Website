@@ -17,3 +17,9 @@
     transition: all 0.3s;
     transform: scale(1.2);
 }
+#Accountpfp:hover{
+    cursor: pointer;
+}
+#ImageExit:hover{
+    cursor: pointer;
+}

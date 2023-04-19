@@ -9,6 +9,7 @@ export default function AccountPage(){
     const nav = useNavigate();
     var photoURL = localStorage.getItem('photo');
     var [uname, setUname] = useState('');
+    var [toggleChoose, setChangeImage] = useState(false);
     
     useEffect(() => {
         var temp = localStorage.getItem('user');
@@ -45,7 +46,26 @@ export default function AccountPage(){
             setUname(ChangeUser);
           }).catch((error) => {
             alert(error.message);
+            LogOut();
           });
+        }
+    }
+
+    function ChooseImage(){
+        event?.preventDefault();
+        setChangeImage(prevCheck => !prevCheck);
+    }
+
+    function DeleteUser(){
+        event?.preventDefault();
+        const user = auth.currentUser;
+        if(user){
+            deleteUser(user).then(() => {
+                nav('/');
+              }).catch((error) => {
+                alert(error.message);
+                LogOut();
+              });
         }
     }
 
@@ -69,7 +89,12 @@ export default function AccountPage(){
         <div>
         <Navbar></Navbar>
         <div className = 'h-screen justify-center flex'>
-            <img alt="User Profile Picture" src={photoURL || 'Assets/pfp.png'} className='h-48 mt-10 w-48 absolute rounded-full'/>
+            <img onClick={ChooseImage} id="Accountpfp" alt="User Profile Picture" src={photoURL || 'Assets/pfp.png'} className='h-48 mt-10 w-48 absolute rounded-full'/>
+            {toggleChoose &&
+            <div className=' mt-28 h-1/2 w-1/2 bg-slate-200 flex justify-center z-10 absolute'>
+                <h1 id="ImageExit" onClick={ChooseImage} className="text-2xl font-bold text-black ml-auto mr-2 aboslute">X</h1>
+            </div>
+            }
             <h1 className='text-3xl font-bold text-center absolute text-black mt-60'>{uname}</h1>
             <form className='justify-center flex content-center mt-56 flex-col h-96'>
                 <input id="Loginput" type = "text"  className= 'bg-slate-200 mt-20  h-10 w-64 rounded-lg text-center' name="text"   placeholder = "Change Username" 
@@ -81,7 +106,7 @@ export default function AccountPage(){
                 <button id='PassChange' onClick={UpdatePassword} className = "mt-5 bg-white h-10 ml-10 w-2/3 text-center rounded-lg border-solid border-blue-500 border text-black text-sm font-600" 
                 >Update Password</button>
                 <button id="DelAccount" className = "mt-10 bg-red-500 h-10 w-2/3 ml-10 text-center rounded-lg border-solid border-black border text-black text-lg font-400" 
-                onClick={LogOut}>Delete Account</button>
+                onClick={DeleteUser}>Delete Account</button>
             </form>
         </div>
         </div>

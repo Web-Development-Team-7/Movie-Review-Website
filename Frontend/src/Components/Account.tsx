@@ -43,7 +43,7 @@ export default function AccountPage(){
     }
 
     //Function that takes in username input, and updates it in firebase
-    function UpdateUser(){
+    function UpdateUser(e: React.MouseEvent<HTMLButtonElement>){
         event?.preventDefault();
         //If the username hook has not been changed, return an error
         if(ChangeUser === ''){
@@ -69,7 +69,7 @@ export default function AccountPage(){
     }
 
     //Function that updates the photoURL in firebase
-    function UpdateImage(){
+    function UpdateImage(e: React.MouseEvent<HTMLButtonElement>){
         event?.preventDefault();
 
         //If no url has been inputted, return error
@@ -108,7 +108,7 @@ export default function AccountPage(){
     }
 
     //function for deleting the user
-    function DeleteUser(){
+    function DeleteUser(e: React.MouseEvent<HTMLButtonElement>){
         event?.preventDefault();
         const user = auth.currentUser;
         if(user){
@@ -124,7 +124,7 @@ export default function AccountPage(){
     }
 
     //Function that updates password
-    function UpdatePassword(){
+    function UpdatePassword(e: React.MouseEvent<HTMLButtonElement>){
         event?.preventDefault();
         //If user has not inputted any password, return error.
         if(ChangePass === ''){

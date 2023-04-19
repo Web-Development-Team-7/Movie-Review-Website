@@ -2,7 +2,7 @@ import '../Styles/details.css';
 import React from "react"
 import Navbar from "./navbar"
 
-
+// Dummy data to fill the page for now
 const movieDetails = {
     poster_path: "https://image.tmdb.org/t/p/w200/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
     backdrop_path: "https://image.tmdb.org/t/p/w200/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
@@ -15,7 +15,7 @@ const movieDetails = {
     actors: ["Robert Downey Jr.", "Chris Evans", "Mark Ruffalo", "Chris Hemsworth", "Scarlett Johansson", "Jeremy Renner", "Don Cheadle", "Paul Rudd", "Brie Larson", "Karen Gillan", "Danai Gurira", "Benedict Wong", "Jon Favreau", "Bradley Cooper", "Gwyneth Paltrow", "Josh Brolin"],
     comments: ["Trash", "BEST THING I'VE EVER SEEN", "Waste of money and time", "Mediocre", "Not too shabby"]
 }
-
+// Renders the movie details page of a selected movie
 export default function MoviePage() {
     return(
         <React.Fragment>
@@ -37,15 +37,15 @@ export default function MoviePage() {
         </React.Fragment>
     )
 }
-
+// Renders the Name of the movie
 function Name() {
     return(
         <React.Fragment>
-            <h1>{movieDetails.title}</h1>
+            <h1 className='text-2xl'>{movieDetails.title}</h1>
         </React.Fragment>
     )
 }
-
+// Renders the comments section
 function Comments() {
     return(
         <React.Fragment>
@@ -55,7 +55,7 @@ function Comments() {
         </React.Fragment>
     )
 }
-
+// Renders the ratings of the movie
 function Ratings() {
     return(
         <React.Fragment>
@@ -65,7 +65,7 @@ function Ratings() {
         </React.Fragment>
     )
 }
-
+// Renders the list of actors
 function ActorList() {
     return(
         <React.Fragment>
@@ -80,7 +80,7 @@ function ActorList() {
         </React.Fragment>
     )
 }
-
+// Renders the list of genres
 function Genres() {
     return(
         <React.Fragment>
@@ -95,7 +95,7 @@ function Genres() {
         </React.Fragment>
     )
 }
-
+// Renders the synopsis of the movie
 function Synopsis() {
     return(
         <React.Fragment>

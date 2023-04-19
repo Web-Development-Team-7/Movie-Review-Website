@@ -23,9 +23,17 @@ export default function AccountPage(){
         <div>
         <Navbar></Navbar>
         <div className = 'h-screen justify-center flex'>
-            <img alt="User Profile Picture" src={photoURL || 'Assets/pfp.png'} className='h-1/4 mt-10 w-2/12 relative'/>
-            <button className = "mt-96 bg-blue-500 h-10 w-1/12 text-center rounded-lg border-solid border-black border text-black text-lg font-400 fixed" 
-            onClick={LogOut}>Logout</button>
+            <img alt="User Profile Picture" src={photoURL || 'Assets/pfp.png'} className='h-48 mt-10 w-48 absolute rounded-full'/>
+            <form className='justify-center flex content-center mt-56 flex-col h-96'>
+                <input id="" type = "text"  className= 'bg-slate-200  h-10 w-64 rounded-lg text-center' name="text"   placeholder = "Change Username" />
+                <button className = "mt-5 bg-blue-500 h-10 ml-10 w-2/3 text-center rounded-lg border-solid border-black border text-white text-sm font-600" 
+                >Update User</button>
+                <input id="" type = "password"  className= 'bg-slate-200 mt-10 h-10 w-64 rounded-lg text-center' name="text"   placeholder = "Change Password" />
+                <button className = "mt-5 bg-white h-10 ml-10 w-2/3 text-center rounded-lg border-solid border-blue-500 border text-black text-sm font-600" 
+                >Update Password</button>
+                <button className = "mt-10 bg-red-500 h-10 w-2/3 ml-10 text-center rounded-lg border-solid border-black border text-black text-lg font-400" 
+                onClick={LogOut}>Delete Account</button>
+            </form>
         </div>
         
         </div>

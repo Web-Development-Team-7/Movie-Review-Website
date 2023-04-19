@@ -8,7 +8,7 @@ export default function AccountPage(){
     const auth = getAuth();
     const nav = useNavigate();
     //The photo URL that will be displayed to the user
-    var [photoURL, setPhotoURL] = useState('');localStorage.getItem('photo');
+    var [photoURL, setPhotoURL] = useState('');
     //Will be used to update the photo displayed
     var [updatePhoto, setUpdatePhoto] = useState('');
     //Display the username in frontend

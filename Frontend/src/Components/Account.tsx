@@ -7,14 +7,19 @@ import './styles/Account.css'
 export default function AccountPage(){
     const auth = getAuth();
     const nav = useNavigate();
-    var photoURL = localStorage.getItem('photo');
+    var [photoURL, setPhotoURL] = useState('');localStorage.getItem('photo');
+    var [updatePhoto, setUpdatePhoto] = useState('');
     var [uname, setUname] = useState('');
     var [toggleChoose, setChangeImage] = useState(false);
     
     useEffect(() => {
         var temp = localStorage.getItem('user');
+        var temp2 = localStorage.getItem('photo');
         if(temp){
         setUname(temp);
+        }
+        if(temp2){
+            setPhotoURL(temp2);
         }
       }, []);
     console.log(photoURL)
@@ -44,6 +49,30 @@ export default function AccountPage(){
           }).then(() => {
             alert("Update Successful!");
             setUname(ChangeUser);
+          }).catch((error) => {
+            alert(error.message);
+            LogOut();
+          });
+        }
+    }
+
+    function UpdateImage(){
+        event?.preventDefault();
+
+        if(!updatePhoto){
+            return alert("Please Input Valid File");
+        }
+        const user = auth.currentUser;
+        
+        if(user!== null){
+        updateProfile(user, {
+            photoURL: updatePhoto
+          }).then(() => {
+            alert("Update Successful!");
+            var x = user.photoURL;
+            if(x){
+                setPhotoURL(updatePhoto);
+            }
           }).catch((error) => {
             alert(error.message);
             LogOut();
@@ -93,6 +122,10 @@ export default function AccountPage(){
             {toggleChoose &&
             <div className=' mt-28 h-1/2 w-1/2 bg-slate-200 flex justify-center z-10 absolute'>
                 <h1 id="ImageExit" onClick={ChooseImage} className="text-2xl font-bold text-black ml-auto mr-2 aboslute">X</h1>
+                <input type="text" className='mt-48 ml-1 absolute w-1/2 h-10 bg-white rounded-lg text-center' placeholder="Input Image Link"
+                onChange={(e) => setUpdatePhoto(e.target.value)}></input>
+                <button id='PassChange' onClick={UpdateImage} className = "mt-72 mr-10 bg-white h-10 ml-10 w-2/12 absolute text-center rounded-lg border-solid border-blue-500 border text-black text-sm font-600" 
+                >Update</button>
             </div>
             }
             <h1 className='text-3xl font-bold text-center absolute text-black mt-60'>{uname}</h1>

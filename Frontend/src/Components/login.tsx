@@ -42,7 +42,17 @@ export default function Login(){
         //If successful, set the user as the email name. Will add option in future to update display name.
         //Otherwise, same function as above.
         signInWithEmailAndPassword(auth, email, password).then((userCredentials) =>{
-            localStorage.setItem("user", email);
+            var user = auth.currentUser;
+            var photo = user?.photoURL;
+            if(user && user.displayName){
+                localStorage.setItem("user", user.displayName);
+            }
+            if(photo){
+            localStorage.setItem("photo", photo);
+            }
+            else{
+                localStorage.setItem("user", email);
+            }
             nav('/home');
         }).catch((error) => {
             alert(error.message)

@@ -1,0 +1,19 @@
+#UserChange:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    transition: all 0.3s;
+    transform: scale(1.2);
+}
+#PassChange:hover{
+    cursor: pointer;
+    background-color: rgb(59 130 246);
+    color: white;
+    transition: all 0.3s;
+    transform: scale(1.2);
+}
+#DelAccount:hover{
+    cursor: pointer;
+    transition: all 0.3s;
+    transform: scale(1.2);
+}

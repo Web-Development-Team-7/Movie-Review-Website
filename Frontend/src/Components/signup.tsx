@@ -28,7 +28,7 @@ export default function SignUp(){
             nav('/');
         }).catch((error) =>{
             //If there was an error, more likely then not user input email incorrectly.
-            alert('Error - Try signing in with a Valid Email!');
+            alert(error.message);
         })
     }
 

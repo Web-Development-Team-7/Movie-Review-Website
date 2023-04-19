@@ -28,7 +28,7 @@ export default function Login(){
                 nav('/home');
             }     
         }).catch((error) =>{
-            alert("Error!");
+            alert(error.message);
         })
     }
 
@@ -45,7 +45,7 @@ export default function Login(){
             localStorage.setItem("user", email);
             nav('/home');
         }).catch((error) => {
-            alert("Error!")
+            alert(error.message)
         })
     }
 

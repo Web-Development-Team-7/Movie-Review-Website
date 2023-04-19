@@ -138,6 +138,7 @@ export default function AccountPage(){
               }).catch((error) => {
                 //If not successful, show user error and log them out to reauthenticate
                 alert(error.message)
+                LogOut();
               });
             }
     }

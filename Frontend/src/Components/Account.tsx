@@ -7,99 +7,126 @@ import './styles/Account.css'
 export default function AccountPage(){
     const auth = getAuth();
     const nav = useNavigate();
+    //The photo URL that will be displayed to the user
     var [photoURL, setPhotoURL] = useState('');localStorage.getItem('photo');
+    //Will be used to update the photo displayed
     var [updatePhoto, setUpdatePhoto] = useState('');
+    //Display the username in frontend
     var [uname, setUname] = useState('');
+    //Toggle the screen overlay to change photo
     var [toggleChoose, setChangeImage] = useState(false);
-    
+
+    //On page load, set the username and photo attributes
     useEffect(() => {
+        //Use temporary values, and use if statements incase values are null.
         var temp = localStorage.getItem('user');
         var temp2 = localStorage.getItem('photo');
-        if(temp){
-        setUname(temp);
-        }
-        if(temp2){
+        if(temp && temp2){
+            setUname(temp);
             setPhotoURL(temp2);
         }
       }, []);
-    console.log(photoURL)
 
+    //useState hook to take input of user profile changes
     var [ChangeUser, setChangeUser] = useState('');
     var [ChangePass, setChangePass] = useState('');
     
+    //Handles logout when user has been inactive for a period of time
     function LogOut(){
         signOut(auth).then(() => {
+            //Clears local storage of user information such as name and pfp.
             localStorage.clear();
             nav('/');
          }).catch((error) => {
-            alert("An Error Has Occured!");
+            alert(error.message);
         });
     }
 
+    //Function that takes in username input, and updates it in firebase
     function UpdateUser(){
         event?.preventDefault();
+        //If the username hook has not been changed, return an error
         if(ChangeUser === ''){
             return alert("Please Fill In Valid Value!");
         }
         const user = auth.currentUser;
         
+        //Checks if the user is not null to prevent errors
         if(user!== null){
+        //Updates username, and updates the display variable in frontend
         updateProfile(user, {
             displayName: ChangeUser
           }).then(() => {
             alert("Update Successful!");
             setUname(ChangeUser);
           }).catch((error) => {
+            //When an error occurs, it usually due to a period of inactivity
+            //Redirect user to login page to sign in again
             alert(error.message);
             LogOut();
           });
         }
     }
 
+    //Function that updates the photoURL in firebase
     function UpdateImage(){
         event?.preventDefault();
 
+        //If no url has been inputted, return error
         if(!updatePhoto){
             return alert("Please Input Valid File");
         }
         const user = auth.currentUser;
         
+        //If the user is not null to satisfy typescript checking
         if(user!== null){
+            //Updates the user profile picture
         updateProfile(user, {
             photoURL: updatePhoto
           }).then(() => {
+            //Set a temporary variable to the photourl, check if variable is not null
+            //If variable is not null, update display on frontend
             alert("Update Successful!");
             var x = user.photoURL;
             if(x){
                 setPhotoURL(updatePhoto);
             }
           }).catch((error) => {
+            //When an error occurs, it usually due to a period of inactivity
+            //Redirect user to login page to sign in again
             alert(error.message);
             LogOut();
           });
         }
     }
 
+    //When a user clicks on their display icon, toggle a variable that determines whether
+    //an input display for changing the image is visible.
     function ChooseImage(){
         event?.preventDefault();
         setChangeImage(prevCheck => !prevCheck);
     }
 
+    //function for deleting the user
     function DeleteUser(){
         event?.preventDefault();
         const user = auth.currentUser;
         if(user){
             deleteUser(user).then(() => {
+                //If successful, redirect user to login page
                 nav('/');
               }).catch((error) => {
+                //If not successful, show user error and log them out to reauthenticate
                 alert(error.message);
                 LogOut();
               });
         }
     }
 
+    //Function that updates password
     function UpdatePassword(){
         event?.preventDefault();
+        //If user has not inputted any password, return error.
         if(ChangePass === ''){
             return alert("Please Fill In Valid Value!");
         }
@@ -109,6 +136,7 @@ export default function AccountPage(){
             updatePassword(user, ChangePass).then(() => {
                 alert("Success");
               }).catch((error) => {
+                //If not successful, show user error and log them out to reauthenticate
                 alert(error.message)
               });
             }

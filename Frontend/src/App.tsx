@@ -6,6 +6,7 @@ import HomePage from './Components/Homepage'
 import SignUp from './Components/signup'
 import MoviePage from './Components/details'
 import AccountPage from './Components/Account'
+import TagsPage from './Components/Tags'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path = '/Signup' element={<SignUp />}/>
         <Route path = '/details' element={<MoviePage />}/>
         <Route path = '/account' element={<AccountPage />}/>
+        <Route path = '/tags' element={<TagsPage />}/>
       </Routes>
     </React.Fragment>
   )

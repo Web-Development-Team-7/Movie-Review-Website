@@ -1,0 +1,20 @@
+input[type="checkbox"]{
+    width: auto;
+    cursor: pointer;
+    margin-top: 1.5vh;
+    border: 2px solid black;
+    background: white;
+}
+label{
+    display: inline;
+    margin-left: 5px;
+    font-size: 2vh;
+    font-weight: 700;
+    color: black;  
+}
+#TagButton:hover{
+    transition: all 0.3s;
+    transform: scale(1.2);
+    background-color: black;
+    color: white;
+}

@@ -1,15 +1,31 @@
 import React, { useState,useEffect, ReactHTMLElement, ChangeEventHandler } from 'react';
 import Navbar from './navbar';
+import axios from 'axios';
 import './styles/Tags.css';
 
 export default function TagsPage(){
     var [input, setInput] = useState<Array <String>>([]);
     var [hasSearch, sethasSearch] = useState<Boolean>(false);
+    var [pageNo, setpageNo] = useState<Number>(1);
+    var [movies, setMovies] = useState<Array<object>>();
 
     function HandleSearch(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         var tagStr = input.toString();
-        
+        const data = {
+            genre_ids: tagStr,
+            page: pageNo
+        };
+        var url = "http://localhost:5678/tags";
+        if(input.length === 0){
+            return alert("Please Select A Tag")
+        }
+        axios.post(url, data).then((res)=>{
+            setMovies(res.data);
+            alert("Success!");
+        }).catch((error) => {
+            alert(error.response.data.message)
+        });
     }
     
     function handleInput(e: React.ChangeEvent<HTMLInputElement>){

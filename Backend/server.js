@@ -38,9 +38,9 @@ const movies = response.data.results.slice(0, 50);
 
     app.get('/actors/:movie_id', (req, res) => {
         const MOVIEDB_API_KEY = '5e072d084652ab8ef66bf80de30d4235';
-    const MOVIE_ID = req.params.movie_id; // Replace with the ID of the movie you want to get the actors for
+        const MOVIE_ID = req.params.movie_id; // Replace with the ID of the movie you want to get the actors for
       // Make a GET request to the moviedb API to get the cast details for the movie
-      request.get(`https://api.themoviedb.org/3/movie/${MOVIE_ID}/credits?api_key=${MOVIEDB_API_KEY}`, (error, response, body) => {
+        request.get(`https://api.themoviedb.org/3/movie/${MOVIE_ID}/credits?api_key=${MOVIEDB_API_KEY}`, (error, response, body) => {
         if (error) {
           console.error(error);
           res.status(500).send('Internal Server Error');
@@ -103,23 +103,20 @@ const movies = response.data.results.slice(0, 50);
     app.get('/movies/:query', (req, res) => {
       const options = {
         method: 'GET',
-        url: 'https://advanced-movie-search.p.rapidapi.com/search/movie',
-        params: {query: req.params.query, page: '1'},
+        url: 'https://advanced-movie-search.p.rapidapi.com/movies/getdetails',
+        params: {movie_id: req.params.query},
         headers: {
-          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+          'X-RapidAPI-Key': '47d048e09dmsh82922bd4aa60f6ep15bd6bjsnf22dbc12cd4b',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };
-    
-      axios.request(options)
-        .then(response => {
-          res.send(response.data);
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-          res.status(500).send('Server Error');
-        });
+      
+      axios.request(options).then(function (response) {
+        console.log(response.data);
+        res.send(response.data);
+      }).catch(function (error) {
+        console.error(error);
+      });    
     });
 
 

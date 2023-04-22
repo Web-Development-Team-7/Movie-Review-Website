@@ -5,13 +5,16 @@ import './styles/Tags.css';
 
 export default function TagsPage(){
     var [input, setInput] = useState<Array <String>>([]);
-    var [hasSearch, sethasSearch] = useState<Boolean>(false);
-    var [pageNo, setpageNo] = useState<Number>(1);
+    var [hasSearch, sethasSearch] = useState(false);
+    var [pageNo, setpageNo] = useState(1);
     var [movies, setMovies] = useState<Array<object>>();
+    var [loading, setLoading] = useState(Boolean);
+    var [searched, setSearched] = useState(false);
 
     function HandleSearch(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         var tagStr = input.toString();
+        setLoading(true);
         const data = {
             genre_ids: tagStr,
             page: pageNo
@@ -20,9 +23,14 @@ export default function TagsPage(){
         if(input.length === 0){
             return alert("Please Select A Tag")
         }
+        
         axios.post(url, data).then((res)=>{
-            setMovies(res.data);
+            setSearched(true);
+            setLoading(false);
+            console.log(res.data.results)
+            setMovies(res.data.results);
             alert("Success!");
+            setpageNo(pageNo += 1);
         }).catch((error) => {
             alert(error.response.data.message)
         });
@@ -43,11 +51,25 @@ export default function TagsPage(){
             <div>
                 <Navbar></Navbar>
             </div>
-            <div>
-                <h1 className="bg-gray-950 ml-60 h-screen relative">Hello World!</h1>
+            {!searched &&
+            <div className="bg-gray-950 ml-60 h-screen ">
+                <h1 className="text-white pt-5 text-center text-4xl font-black">Movies</h1>    
             </div>
-            <div className="flex border-r-4 border-black h-full w-2/12 justify-center flex-col ">
-                <h1 className="text-center top-0 mt-16 absolute text-black font-bold text-3xl ml-3 decoration-solid underline underline-offset-2 decoration-2">Search By Tags</h1>
+            }
+            {loading &&
+            <div className="bg-gray-950 ml-60 h-screen ">
+                <h1 className="text-white pt-20 text-3xl font-black">Loading..</h1>
+            </div>
+            }
+            
+                {!loading &&
+                <div className="bg-gray-950 ml-60 h-full ">
+                    <h1 className="text-white bg-black ">Hi</h1>
+                    <h2>Hey</h2>
+                </div>
+                }
+            <div className="flex border-r-4 border-black h-full w-2/12 justify-center flex-col">
+                <h1 className="text-center top-0 mt-16 absolute text-black font-black text-3xl ml-10 ">Tags</h1>
                 <form className='absolute w-1/12 ml-10 mx-auto top-28'>
                 <button id="TagButton"onClick={HandleSearch} className="mt-1 bg-white h-10 w-5/6 text-center rounded-lg border-solid border-black border text-black text-lg font-500">Search</button><br></br>
 

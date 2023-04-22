@@ -37,7 +37,7 @@ const Favorite: React.FC<Props> = ({/* Props here */}) => {
 
   return (
     <React.Fragment>
-        
+        RAHH
     </React.Fragment>
   );
 };

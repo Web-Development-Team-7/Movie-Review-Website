@@ -7,7 +7,7 @@ export default function TagsPage(){
     var [input, setInput] = useState<Array <String>>([]);
     var [hasSearch, sethasSearch] = useState(false);
     var [pageNo, setpageNo] = useState(1);
-    var [movies, setMovies] = useState<Array<object>>();
+    var [movies, setMovies] = useState<Array<any>>();
     var [loading, setLoading] = useState(Boolean);
     var [searched, setSearched] = useState(false);
 
@@ -29,7 +29,6 @@ export default function TagsPage(){
             setLoading(false);
             console.log(res.data.results)
             setMovies(res.data.results);
-            alert("Success!");
             setpageNo(pageNo += 1);
         }).catch((error) => {
             alert(error.response.data.message)
@@ -61,16 +60,20 @@ export default function TagsPage(){
                 <h1 className="text-white pt-20 text-3xl font-black">Loading..</h1>
             </div>
             }
-            
-                {!loading &&
-                <div className="bg-gray-950 ml-60 h-full ">
-                    <h1 className="text-white bg-black ">Hi</h1>
-                    <h2>Hey</h2>
-                </div>
-                }
+            {!loading && movies &&
+            <div className="bg-gray-950 ml-60 h-full grid grid-cols-4 gap-2">
+                {movies.map(item => {
+                    return (
+                    <img src={item.backdrop_path} alt = "Movie_Picture" className = "h-48 w-3/4 pb-5 ml-4 mt-4 rounded-md" />
+                        
+                    );
+                    })}
+                    <button id="TagButton" onClick={HandleSearch} className="mt-1 bottom-0 bg-blue-500 text-white font-black h-10 w-1/12 justify-center mb-5 text-center absolute rounded-lg border-solid border-black border text-lg font-500">Expand</button><br></br>
+            </div>
+            }
             <div className="flex border-r-4 border-black h-full w-2/12 justify-center flex-col">
                 <h1 className="text-center top-0 mt-16 absolute text-black font-black text-3xl ml-10 ">Tags</h1>
-                <form className='absolute w-1/12 ml-10 mx-auto top-28'>
+                <form className='fixed w-1/12 ml-10 mx-auto top-28'>
                 <button id="TagButton"onClick={HandleSearch} className="mt-1 bg-white h-10 w-5/6 text-center rounded-lg border-solid border-black border text-black text-lg font-500">Search</button><br></br>
 
                     <input type="checkbox" onChange={handleInput} id="28"/>

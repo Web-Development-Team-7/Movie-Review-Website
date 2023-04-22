@@ -2,6 +2,7 @@ import '../Styles/details.css';
 import Navbar from "./navbar"
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import "./details.css"
 
 interface Movie {
     adult: boolean;
@@ -87,14 +88,31 @@ export default function MoviePage() {
     //   }, [location.search]);
 
     return (
-        <div>
-            {movie && (
-                <div>
-                    <h1>{movie.title}</h1>
-                    <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
-                    <p>{movie.overview}</p>
-                </div>
-            )}
-        </div>
+        // <div>
+        //     {movie && (
+        //         <div>
+        //             <h1>{movie.title}</h1>
+        //             <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} style={{ width: 500, height: 600 }} alt={movie.title}  />
+        //             <p>{movie.overview}</p>
+        //         </div>
+        //     )}
+        // </div>
+        <div className="bg-gray-100 p-6">
+  {movie && (
+    <div className="bg-white rounded-lg shadow-lg p-6 ">
+      <h1 className="text-3xl font-bold mb-4">{movie.title}</h1>
+      <center>
+      <img 
+        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} 
+        className="w-64 h-96 rounded-lg shadow-lg mb-4" 
+        alt={movie.title}  
+      />
+      </center>
+      
+      <p className="text-lg leading-7">{movie.overview}</p>
+    </div>
+  )}
+</div>
     );
+    
 }

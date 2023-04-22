@@ -69,7 +69,7 @@ export default function AccountPage(){
     }
 
     //Function that updates the photoURL in firebase
-    function UpdateImage(event: React.MouseEvent<HTMLButtonElement>){
+    function UpdateImage(){
         event?.preventDefault();
 
         //If no url has been inputted, return error
@@ -90,6 +90,7 @@ export default function AccountPage(){
             var x = user.photoURL;
             if(x){
                 setPhotoURL(updatePhoto);
+                localStorage.setItem('photo', x);
             }
           }).catch((error) => {
             //When an error occurs, it usually due to a period of inactivity

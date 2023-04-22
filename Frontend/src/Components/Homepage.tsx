@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import '../Styles/HomePage.css';
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 import Navbar from './navbar';
 
 interface Movie {
@@ -71,7 +72,9 @@ let HomePage = () => {
         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
         .map((item, index) => (
           <div key={index}>
-            <img src={`https://image.tmdb.org/t/p/w200/${item.backdrop_path}`} alt={item.title} />
+            <Link to= {`/details?id=${item.id}`}>
+              <img src={`https://image.tmdb.org/t/p/w200/${item.backdrop_path}`} alt={item.title} />
+            </Link>
           </div>
         ))
       }

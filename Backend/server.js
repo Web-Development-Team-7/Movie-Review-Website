@@ -63,9 +63,12 @@ app.get('/getTop/', async function (req, res) {
     
         // Extract the list of actors from the API response
         const actors = data.cast.map(actor => actor.name);
-    
+        const limitedActors = actors.slice(0, 20);
+
+        // Convert the limited list of actors to a comma-separated string
+        let actorList = limitedActors.join(', ');
         // Send the list of actors in the response
-        res.send(`Actors in the movie: ${actors.join(', ')}`);
+        res.send(JSON.stringify(actorList));
       });
     });
 

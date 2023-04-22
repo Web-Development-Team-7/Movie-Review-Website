@@ -145,7 +145,7 @@ export default function AccountPage(){
 
     return(
         <div>
-        <Navbar></Navbar>
+        <Navbar/>
         <div className = 'h-screen justify-center flex'>
             <img onClick={ChooseImage} id="Accountpfp" alt="User Profile Picture" src={photoURL || 'Assets/pfp.png'} className='h-48 mt-10 w-48 absolute rounded-full'/>
             {toggleChoose &&

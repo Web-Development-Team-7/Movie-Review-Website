@@ -56,6 +56,7 @@ const commentSchema = new mongoose.Schema({
 // Model for the comment data
 const Comment = mongoose.model('Comment', commentSchema);
 
+// Post request to the comment database
 app.post('/comment', async function (req, res) {
   console.log(req.body);
   const comment = new Comment({
@@ -71,6 +72,18 @@ app.post('/comment', async function (req, res) {
     res.status(201).json(newComment);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+})
+
+app.get('/comment/:movieID', async function (req, res) {
+  console.log(req.params.movieID);
+
+  try{
+    const comments = await Comment.find({movieID: req.params.movieID});
+    res.status(200).send(comments);
+  }
+  catch(err){
+    res.status(500).json({message: err.message});
   }
 })
 

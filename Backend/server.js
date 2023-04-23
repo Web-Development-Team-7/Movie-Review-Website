@@ -27,10 +27,6 @@ dbMongo.once('open', function() {
 
 // This is the schema for the comment database
 const commentSchema = new mongoose.Schema({
-  commentID: {
-    type: Number,
-    required: true,
-  },
   userID: {
     type: String,
     required: true,
@@ -59,9 +55,12 @@ const Comment = mongoose.model('Comment', commentSchema);
 app.post('/comment', async function (req, res) {
   console.log(req.body);
   const comment = new Comment({
+    commentID: req.body.commentID,
     userID: req.body.userID,
     movieID: req.body.movieID,
-    comment: req.body.comment
+    comment: req.body.comment,
+    date: req.body.date,
+    likes: req.body.likes
   });
   try {
     const newComment = await comment.save();

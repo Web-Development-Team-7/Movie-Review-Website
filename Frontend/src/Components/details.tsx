@@ -146,7 +146,7 @@ function CommentSection(props) {
         console.log(userID);
         console.log(movieID);
 
-        const url = 'http://localhost:5678/comments';
+        const url = 'http://localhost:5678/comment';
         const data = {
             comment: comment,
             userID: userID,

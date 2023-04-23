@@ -125,10 +125,52 @@ export default function MoviePage() {
                 
                 <React.Fragment>
                 <section id="comment-section">
-                    
+                    <CommentSection movieID={movie.id}/>
                 </section>
                 </React.Fragment>
                 </body>
+        </React.Fragment>
+    )
+}
+
+function CommentSection(props) {
+    console.log(props.movieID)
+    const [comment, setComment] = useState('');
+    const [userID, setUserID] = useState('');
+    const movieID = props.movieID;
+    
+
+    function submitHandler(e) {
+        e.preventDefault();
+        console.log(comment);
+        console.log(userID);
+        console.log(movieID);
+
+        const url = 'http://localhost:5678/comments';
+        const data = {
+            comment: comment,
+            userID: userID,
+            movieID: movieID
+        }
+        axios.post(url, data).then(res => {
+            console.log(res);
+            e.target.reset();
+            console.log("Comment submitted!")
+
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
+    return(
+        
+        <React.Fragment>
+            <h1>Comments {props.movieID}</h1>
+            <form id='comment-form' onSubmit={submitHandler} method='POST'>
+                <input type='text' placeholder='User ID' value={userID} onChange={(e) => setUserID(e.target.value)} /><br></br>
+                <input type='text' placeholder='Comment' value={comment} onChange={(e) => setComment(e.target.value)} />
+                <button type='submit' onClick="postComment()">Submit</button>
+            </form>
         </React.Fragment>
     )
 }

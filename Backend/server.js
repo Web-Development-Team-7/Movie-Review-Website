@@ -13,6 +13,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('./public'));
 
+app.use(cors({
+  origin: '*', // allow to server to accept request from different origin
+}));
+
 // This sets uri to the mongoURL in the .env file
 const uri = process.env.mongoURL
 // This starts the connection to the database
@@ -72,10 +76,6 @@ app.post('/comment', async function (req, res) {
 
 //Have option to Sign in Without Google, used to encrypt Passwords
 const saltRounds = 10;
-
-app.use(cors({
-  origin: '*', // allow to server to accept request from different origin
-}));
 
 app.get('/getTop/', async function (req, res) {
   // View all students if no query parameters are provided

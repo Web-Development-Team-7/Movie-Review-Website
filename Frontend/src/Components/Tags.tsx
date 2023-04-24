@@ -2,6 +2,7 @@ import React, { useState,useEffect, ReactHTMLElement, ChangeEventHandler } from 
 import Navbar from './navbar';
 import axios from 'axios';
 import './styles/Tags.css';
+import { Link } from 'react-router-dom';
 
 export default function TagsPage(){
     var [input, setInput] = useState<Array <String>>([]);
@@ -15,6 +16,7 @@ export default function TagsPage(){
     function HandleSearch(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         var tagStr = input.toString();
+        setpageNo(pageNo = 1);
         setLoading(true);
         const data = {
             genre_ids: tagStr,
@@ -82,10 +84,18 @@ export default function TagsPage(){
             </div>
             }
             {!loading && movies.length != 0 &&
-            <div className="bg-gray-950 ml-60 h-full grid grid-cols-4 gap-1">
+            <div className="bg-gray-950 ml-60 h-full grid grid-cols-4 gap-2">
                 {movies.map(item => {
                     return (
-                        <img src={item.backdrop_path} alt = "Movie_Picture" className = "h-48 w-3/4 pb-5 ml-4 mt-4 rounded-md" />
+                        <>
+                        <Link to={`/details?id=${item.id}`} id ="imgContainter" className="ml-4 mt-2">
+                            <img src={item.backdrop_path} alt = "Movie_Picture" id="img" className = "z-1 rounded-md" />
+                            <div id="imgDes" className=" bg-gray-900 bg-opacity-50 text-white z-2 transition-opacity duration-300 opacity-0 hover:opacity-100 absolute ">
+                                <p className="text-xl font-bold">{item.title}</p>
+                                <p className="text-sm">{item.release_date}</p>
+                            </div>
+                        </Link>
+                        </>
                     );
                     })}
                 <button id="LoadMore" onClick={ExpandSearch} className="mt-1 ml-96 bg-blue-500 translate-x-1/2 text-white font-black h-10 w-3/4 justify-center mb-5 text-center rounded-lg border-solid border-black border text-lg font-500">{pageNo}</button>

@@ -90,7 +90,7 @@ export default function TagsPage(){
                         <>
                         <Link to={`/details?id=${item.id}`} id ="imgContainter" className="ml-4 mt-2">
                             <img src={item.backdrop_path} alt = "Movie_Picture" id="img" className = "z-1 rounded-md" />
-                            <div id="imgDes" className=" bg-gray-900 bg-opacity-50 text-white z-2 transition-opacity duration-300 opacity-0 hover:opacity-100 absolute ">
+                            <div id="imgDes" className="h-40 bg-gray-900 bg-opacity-50 text-white z-2 transition-opacity duration-300 opacity-0 hover:opacity-100 absolute ">
                                 <p className="text-xl font-bold">{item.title}</p>
                                 <p className="text-sm">{item.release_date}</p>
                             </div>

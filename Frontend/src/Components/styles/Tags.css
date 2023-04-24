@@ -26,25 +26,21 @@ label{
     background-color: white;
     color: black;
 }
-
 #imgContainer{
     display: flex;
     flex-direction: row;
     overflow: hidden;
 }
-
 #img{
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     object-fit: cover;
 }
-
 #imgDes{
     padding-bottom: 100px;
     transform: translateY(-100%);
-    height: 20vh;
-    width: 20vh;
+    width: 34vh;
 }
 #imgDes:hover{
     transform: translateY(-100%);

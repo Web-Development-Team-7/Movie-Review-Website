@@ -38,6 +38,11 @@ export default function TagsPage(){
         });
     }
     
+    function hi(){
+        event?.preventDefault();
+        alert("Hi")
+    }
+
     function handleInput(e: React.ChangeEvent<HTMLInputElement>){
         var bool = e.target.checked;
         if(bool){
@@ -88,13 +93,15 @@ export default function TagsPage(){
                 {movies.map(item => {
                     return (
                         <>
-                        <Link to={`/details?id=${item.id}`} id ="imgContainter" className="ml-4 mt-2">
+                        <div  id ="imgContainter" className="ml-4 mt-2">
                             <img src={item.backdrop_path} alt = "Movie_Picture" id="img" className = "z-1 rounded-md" />
                             <div id="imgDes" className="h-40 bg-gray-900 bg-opacity-50 text-white z-2 transition-opacity duration-300 opacity-0 hover:opacity-100 absolute ">
                                 <p className="text-xl font-bold">{item.title}</p>
                                 <p className="text-sm">{item.release_date}</p>
+                                <button onClick={hi} className="bg-red-500 text-center text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-2/12 flex">Hi</button>
+                                <Link to={`/details?id=${item.id}`} className="text-black w-2/12 border border-black border-solid hover:bg-black hover:text-white hover:ease-in text-center absolute mt-10 bg-white rounded-md">Hello</Link>
                             </div>
-                        </Link>
+                        </div>
                         </>
                     );
                     })}

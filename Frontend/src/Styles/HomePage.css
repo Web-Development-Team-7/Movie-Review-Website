@@ -4,14 +4,20 @@ h1 {
 }
 
 #moviecontainer {
+  
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  
+
 }
 
 #moviecontainer img {
-  width: 200px;
+  /*width: 400px;*/
   margin: 10px;
+  height: 225px;
+  image-rendering: high-quality;
+  border-radius: 5px;
 }
 
 
@@ -31,7 +37,7 @@ li {
   justify-content: center;
   align-items: center;
   position: fixed;
-  bottom: 0;
+  bottom: 10px;
   left: 0;
   right: 0;
 }

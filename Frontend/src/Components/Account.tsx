@@ -58,6 +58,7 @@ export default function AccountPage(){
             displayName: ChangeUser
           }).then(() => {
             alert("Update Successful!");
+            localStorage.setItem('user', ChangeUser);
             setUname(ChangeUser);
           }).catch((error) => {
             //When an error occurs, it usually due to a period of inactivity
@@ -125,7 +126,7 @@ export default function AccountPage(){
     }
 
     //Function that updates password
-    function UpdatePassword(e: React.MouseEvent<HTMLButtonElement>){
+    function UpdatePassword(event: React.MouseEvent<HTMLButtonElement>){
         event?.preventDefault();
         //If user has not inputted any password, return error.
         if(ChangePass === ''){
@@ -160,11 +161,11 @@ export default function AccountPage(){
             }
             <h1 className='text-3xl font-bold text-center absolute text-black mt-60'>{uname}</h1>
             <form className='justify-center flex content-center mt-56 flex-col h-96'>
-                <input id="Loginput" type = "text"  className= 'bg-slate-200 mt-20  h-10 w-64 rounded-lg text-center' name="text"   placeholder = "Change Username" 
+                <input id="Loginput" type = "text" className= 'bg-slate-200 mt-20  h-10 w-64 rounded-lg text-center' name="text"   placeholder = "Change Username" 
                 onChange={(e) => setChangeUser(e.target.value)}/>
                 <button id="UserChange" className = "mt-5 bg-blue-500 h-10 ml-10 w-2/3 text-center rounded-lg border-solid border-black border text-white text-sm font-600" 
                 onClick={UpdateUser}>Update User</button>
-                <input id="Loginput" type = "password"  className= 'bg-slate-200 mt-10 h-10 w-64 rounded-lg text-center' name="text"   placeholder = "Change Password" 
+                <input id="Loginput" type = "password"  className= 'bg-slate-200 mt-5 h-10 w-64 rounded-lg text-center' name="text"   placeholder = "Change Password" 
                 onChange={(e) => setChangePass(e.target.value)}/>
                 <button id='PassChange' onClick={UpdatePassword} className = "mt-5 bg-white h-10 ml-10 w-2/3 text-center rounded-lg border-solid border-blue-500 border text-black text-sm font-600" 
                 >Update Password</button>

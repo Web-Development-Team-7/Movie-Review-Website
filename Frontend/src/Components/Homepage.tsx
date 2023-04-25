@@ -26,7 +26,7 @@ let HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [topMovie, setTopMovie]=useState<Movie[]>([]);
   //const[genre, setGenre] = useState([]);
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
   
   const totalPages = Math.ceil(topMovie.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -65,35 +65,22 @@ let HomePage = () => {
 <React.Fragment>
   <Navbar/>
 
-  {/* <div id='moviecontainer'>
-    <ul>
-      {topMovie
-        .filter(movie => movie.backdrop_path)
-        .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-        .map((item, index) => (
-          <div key={index}>
-            <Link to= {`/details?id=${item.id}`}>
-              <img src={`https://image.tmdb.org/t/p/w200/${item.backdrop_path}`} alt={item.title} />
-            </Link>
-          </div>
-        ))
-      }
-    </ul>
-  </div> */}
+ 
   <div id='moviecontainer'>
-  <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-5">
     {topMovie
       .filter(movie => movie.backdrop_path)
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((item, index) => (
         <div key={index} className="relative">
           <Link to= {`/details?id=${item.id}`}>
-            <img src={`https://image.tmdb.org/t/p/w200/${item.backdrop_path}`} alt={item.title} className="w-full" />
-          </Link>
-          <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-50 py-2 px-4 text-white transition-opacity duration-300 opacity-0 hover:opacity-100">
+            <img src={`https://image.tmdb.org/t/p/w400/${item.backdrop_path}`} alt={item.title} className="photo"/>
+
+          <div className="absolute bottom-3 left-3 right-3 bg-gray-900 bg-opacity-50 py-20 px-6 text-white transition-opacity duration-300 opacity-0 hover:opacity-100">
             <p className="text-xl font-bold">{item.title}</p>
             <p className="text-sm">{item.release_date}</p>
           </div>
+          </Link>
         </div>
       ))
     }
@@ -105,7 +92,9 @@ let HomePage = () => {
     {Array.from({ length: totalPages }, (_, index) => (
       <button
         key={index}
-        className={currentPage === index + 1 ? 'active' : ''}
+        className={`${
+    currentPage === index + 1 ? 'active bg-gray-600' : 'bg-gray-500 hover:bg-gray-600'
+  } text-white px-4 py-2 rounded mx-2`}
         onClick={() => handlePageChange(index + 1)}
       >
         {index + 1}

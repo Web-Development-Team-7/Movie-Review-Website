@@ -181,5 +181,33 @@ app.get('/getTop/', async function (req, res) {
       });    
     });
 
+    app.post('/movies', async (req, res) => {
+      const movie_name = req.params.movie_name;
+      const options = {
+        method: 'GET',
+        url: 'https://advanced-movie-search.p.rapidapi.com/search/movie',
+        params: {
+          query: 'Avengers',
+          // query: movie_name,
+          page: '1'
+        },
+        headers: {
+          'content-type': 'application/octet-stream',
+          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+          'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
+        }
+      };
+    
+      try {
+        const response = await axios.request(options);
+        res.send(response.data);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching movies.');
+      }
+    });
+
+
+
 app.listen(5678); //start the server
 console.log('Server is running...');

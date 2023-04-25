@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
-//const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const bcryptjs = require('bcryptjs');
 const axios= require('axios');
@@ -13,24 +13,71 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('./public'));
 
+app.use(cors({
+  origin: '*', // allow to server to accept request from different origin
+}));
+
 // This sets uri to the mongoURL in the .env file
-//const uri = process.env.mongoURL
+const uri = process.env.mongoURL
 // This starts the connection to the database
 //mongoose.connect(uri)
+
 // This is the connection to the database
 //const dbMongo = mongoose.connection;
+
 // This is the error handling for the connection
-//dbMongo.on('error', console.error.bind(console, 'connection error:'));
+// dbMongo.on('error', console.error.bind(console, 'connection error:'));
 // dbMongo.once('open', function() {
 //   console.log('Connected to MongoDB');
 // });
 
+// This is the schema for the comment database
+const commentSchema = new mongoose.Schema({
+  userID: {
+    type: String,
+    required: true,
+  },
+  movieID: {
+    type: Number,
+    required: true,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  likes: {
+    type: Number,
+    default: 0,
+  }
+})
+
+// Model for the comment data
+const Comment = mongoose.model('Comment', commentSchema);
+
+app.post('/comment', async function (req, res) {
+  console.log(req.body);
+  const comment = new Comment({
+    commentID: req.body.commentID,
+    userID: req.body.userID,
+    movieID: req.body.movieID,
+    comment: req.body.comment,
+    date: req.body.date,
+    likes: req.body.likes
+  });
+  try {
+    const newComment = await comment.save();
+    res.status(201).json(newComment);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+})
+
 //Have option to Sign in Without Google, used to encrypt Passwords
 const saltRounds = 10;
-
-app.use(cors({
-  origin: '*', // allow to server to accept request from different origin
-}));
 
 app.get('/getTop/', async function (req, res) {
   // View all students if no query parameters are provided
@@ -72,26 +119,26 @@ app.get('/getTop/', async function (req, res) {
       });
     });
 
-    app.get('/genres', (req, res) => {
-      //const genre_id = req.params.genre_id;
+    app.post('/tags', function (req, res) {
+      const genre_id = req.body.genre_ids;
+      const page_no = req.body.page;
       const options = {
         method: 'GET',
         url: 'https://advanced-movie-search.p.rapidapi.com/discover/movie',
-        params: {with_genres: '28, 14' , page: '1'},
+        params: {with_genres: genre_id , page: page_no},
         headers: {
           'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };
-    
       axios.request(options)
-        .then(response => {
-          res.send(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-          res.status(500).send('Server Error');
-        });
+      .then(response => {
+        res.status(200).send(response.data);
+     })
+      .catch(error => {
+           console.error(error);
+           res.status(500).send('Server Error');
+      });
     });
       /**
        * MOVIE
@@ -134,11 +181,6 @@ app.get('/getTop/', async function (req, res) {
       });    
     });
 
-    
-
-
-
-
     app.post('/movies', async (req, res) => {
       const movie_name = req.params.movie_name;
       const options = {
@@ -164,6 +206,7 @@ app.get('/getTop/', async function (req, res) {
         res.status(500).send('Error fetching movies.');
       }
     });
+
 
 
 app.listen(5678); //start the server

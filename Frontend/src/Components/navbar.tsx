@@ -9,7 +9,7 @@ const navigation = [
   { name: 'Home', href: '/home', current: true },
   { name: 'Account', href: '/account', current: false },
   { name: 'Favorite', href: '#', current: false },
-  { name: 'Tags', href: '#', current: false },
+  { name: 'Tags', href: '/tags', current: false },
 ]
 
 
@@ -56,7 +56,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <h4>Movitoes</h4>
+                  <h4 className ='text-white'>Movitoes</h4>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

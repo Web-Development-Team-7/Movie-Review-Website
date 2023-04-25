@@ -19,11 +19,13 @@ export default function Login(){
             //Use the google account displayName as the account name.
             const user = res.user.displayName;
             const profile = res.user.photoURL;
+            const uid = res.user.uid;
             //If statement exists because typescript is unsure if user is null or not
             if(user && profile){
                 //If the user does exist, set the users name in the storage to verify a user is logged in.
                 localStorage.setItem("user", user);
                 localStorage.setItem("photo", profile);
+                localStorage.setItem("uid", uid);
                 //Navigate to home page.
                 nav('/home');
             }     
@@ -44,8 +46,10 @@ export default function Login(){
         signInWithEmailAndPassword(auth, email, password).then((userCredentials) =>{
             var user = auth.currentUser;
             var photo = user?.photoURL;
-            if(user && user.displayName){
+            const uid = user?.uid;
+            if(user && user.displayName && uid){
                 localStorage.setItem("user", user.displayName);
+                localStorage.setItem('uid', uid);
             }
             if(photo){
             localStorage.setItem("photo", photo);

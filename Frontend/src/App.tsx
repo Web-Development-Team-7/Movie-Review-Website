@@ -6,8 +6,9 @@ import HomePage from './Components/Homepage'
 import SignUp from './Components/signup'
 import MoviePage from './Components/details'
 import AccountPage from './Components/Account'
+import Favorite from './Components/Favorite'
+import Navbar from './Components/navbar'
 import TagsPage from './Components/Tags'
-
 function App() {
 
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path = '/Signup' element={<SignUp />}/>
         <Route path = '/details' element={<MoviePage />}/>
         <Route path = '/account' element={<AccountPage />}/>
+        <Route path = '/favorite' element={<Favorite />}/>
         <Route path = '/tags' element={<TagsPage />}/>
       </Routes>
     </React.Fragment>

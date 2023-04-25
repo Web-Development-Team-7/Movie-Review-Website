@@ -13,6 +13,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('./public'));
 
+app.use(cors({
+  origin: '*', // allow to server to accept request from different origin
+}));
+
 // This sets uri to the mongoURL in the .env file
 const uri = process.env.mongoURL
 // This starts the connection to the database
@@ -27,12 +31,53 @@ const uri = process.env.mongoURL
 //   console.log('Connected to MongoDB');
 // });
 
+// This is the schema for the comment database
+const commentSchema = new mongoose.Schema({
+  userID: {
+    type: String,
+    required: true,
+  },
+  movieID: {
+    type: Number,
+    required: true,
+  },
+  comment: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  likes: {
+    type: Number,
+    default: 0,
+  }
+})
+
+// Model for the comment data
+const Comment = mongoose.model('Comment', commentSchema);
+
+app.post('/comment', async function (req, res) {
+  console.log(req.body);
+  const comment = new Comment({
+    commentID: req.body.commentID,
+    userID: req.body.userID,
+    movieID: req.body.movieID,
+    comment: req.body.comment,
+    date: req.body.date,
+    likes: req.body.likes
+  });
+  try {
+    const newComment = await comment.save();
+    res.status(201).json(newComment);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+})
+
 //Have option to Sign in Without Google, used to encrypt Passwords
 const saltRounds = 10;
-
-app.use(cors({
-  origin: '*', // allow to server to accept request from different origin
-}));
 
 app.get('/getTop/', async function (req, res) {
   // View all students if no query parameters are provided
@@ -52,9 +97,9 @@ app.get('/getTop/', async function (req, res) {
 
     app.get('/actors/:movie_id', (req, res) => {
         const MOVIEDB_API_KEY = '5e072d084652ab8ef66bf80de30d4235';
-      const MOVIE_ID = req.params.movie_id; // Replace with the ID of the movie you want to get the actors for
+        const MOVIE_ID = req.params.movie_id; // Replace with the ID of the movie you want to get the actors for
       // Make a GET request to the moviedb API to get the cast details for the movie
-      request.get(`https://api.themoviedb.org/3/movie/${MOVIE_ID}/credits?api_key=${MOVIEDB_API_KEY}`, (error, response, body) => {
+        request.get(`https://api.themoviedb.org/3/movie/${MOVIE_ID}/credits?api_key=${MOVIEDB_API_KEY}`, (error, response, body) => {
         if (error) {
           console.error(error);
           res.status(500).send('Internal Server Error');
@@ -65,9 +110,12 @@ app.get('/getTop/', async function (req, res) {
     
         // Extract the list of actors from the API response
         const actors = data.cast.map(actor => actor.name);
-    
+        const limitedActors = actors.slice(0, 20);
+
+        // Convert the limited list of actors to a comma-separated string
+        let actorList = limitedActors.join(', ');
         // Send the list of actors in the response
-        res.send(`Actors in the movie: ${actors.join(', ')}`);
+        res.send(JSON.stringify(actorList));
       });
     });
 
@@ -117,23 +165,20 @@ app.get('/getTop/', async function (req, res) {
     app.get('/movies/:query', (req, res) => {
       const options = {
         method: 'GET',
-        url: 'https://advanced-movie-search.p.rapidapi.com/search/movie',
-        params: {query: req.params.query, page: '1'},
+        url: 'https://advanced-movie-search.p.rapidapi.com/movies/getdetails',
+        params: {movie_id: req.params.query},
         headers: {
-          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+          'X-RapidAPI-Key': '47d048e09dmsh82922bd4aa60f6ep15bd6bjsnf22dbc12cd4b',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };
-    
-      axios.request(options)
-        .then(response => {
-          res.send(response.data);
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-          res.status(500).send('Server Error');
-        });
+      
+      axios.request(options).then(function (response) {
+        console.log(response.data);
+        res.send(response.data);
+      }).catch(function (error) {
+        console.error(error);
+      });    
     });
 
 app.listen(5678); //start the server

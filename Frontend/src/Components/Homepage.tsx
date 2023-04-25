@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import '../Styles/HomePage.css';
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 import Navbar from './navbar';
 
 interface Movie {
@@ -64,19 +65,41 @@ let HomePage = () => {
 <React.Fragment>
   <Navbar/>
 
-  <div id='moviecontainer'>
+  {/* <div id='moviecontainer'>
     <ul>
       {topMovie
         .filter(movie => movie.backdrop_path)
         .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
         .map((item, index) => (
           <div key={index}>
-            <img src={`https://image.tmdb.org/t/p/w200/${item.backdrop_path}`} alt={item.title} />
+            <Link to= {`/details?id=${item.id}`}>
+              <img src={`https://image.tmdb.org/t/p/w200/${item.backdrop_path}`} alt={item.title} />
+            </Link>
           </div>
         ))
       }
     </ul>
-  </div>
+  </div> */}
+  <div id='moviecontainer'>
+  <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {topMovie
+      .filter(movie => movie.backdrop_path)
+      .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+      .map((item, index) => (
+        <div key={index} className="relative">
+          <Link to= {`/details?id=${item.id}`}>
+            <img src={`https://image.tmdb.org/t/p/w200/${item.backdrop_path}`} alt={item.title} className="w-full" />
+          </Link>
+          <div className="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-50 py-2 px-4 text-white transition-opacity duration-300 opacity-0 hover:opacity-100">
+            <p className="text-xl font-bold">{item.title}</p>
+            <p className="text-sm">{item.release_date}</p>
+          </div>
+        </div>
+      ))
+    }
+  </ul>
+</div>
+
 
   <div className='pagination'>
     {Array.from({ length: totalPages }, (_, index) => (

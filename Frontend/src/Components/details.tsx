@@ -131,6 +131,13 @@ export default function MoviePage() {
                 </body>
         </React.Fragment>
     )
+    else{
+        return (
+            <>
+                <h1>Vladimiar Putin</h1>
+            </>
+        )
+    }
 }
 
 function CommentSection(props) {

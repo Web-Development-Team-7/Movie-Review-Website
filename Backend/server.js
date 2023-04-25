@@ -20,14 +20,16 @@ app.use(cors({
 // This sets uri to the mongoURL in the .env file
 const uri = process.env.mongoURL
 // This starts the connection to the database
-mongoose.connect(uri)
+//mongoose.connect(uri)
+
 // This is the connection to the database
-const dbMongo = mongoose.connection;
+//const dbMongo = mongoose.connection;
+
 // This is the error handling for the connection
-dbMongo.on('error', console.error.bind(console, 'connection error:'));
-dbMongo.once('open', function() {
-  console.log('Connected to MongoDB');
-});
+// dbMongo.on('error', console.error.bind(console, 'connection error:'));
+// dbMongo.once('open', function() {
+//   console.log('Connected to MongoDB');
+// });
 
 // This is the schema for the comment database
 const commentSchema = new mongoose.Schema({
@@ -117,26 +119,26 @@ app.get('/getTop/', async function (req, res) {
       });
     });
 
-    app.get('/genres', (req, res) => {
-      //const genre_id = req.params.genre_id;
+    app.post('/tags', function (req, res) {
+      const genre_id = req.body.genre_ids;
+      const page_no = req.body.page;
       const options = {
         method: 'GET',
         url: 'https://advanced-movie-search.p.rapidapi.com/discover/movie',
-        params: {with_genres: '28, 14' , page: '1'},
+        params: {with_genres: genre_id , page: page_no},
         headers: {
           'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };
-    
       axios.request(options)
-        .then(response => {
-          res.send(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-          res.status(500).send('Server Error');
-        });
+      .then(response => {
+        res.status(200).send(response.data);
+     })
+      .catch(error => {
+           console.error(error);
+           res.status(500).send('Server Error');
+      });
     });
       /**
        * MOVIE
@@ -178,8 +180,6 @@ app.get('/getTop/', async function (req, res) {
         console.error(error);
       });    
     });
-
-
 
 app.listen(5678); //start the server
 console.log('Server is running...');

@@ -1,0 +1,47 @@
+input[type="checkbox"]{
+    width: auto;
+    cursor: pointer;
+    margin-top: 1.5vh;
+    background-color: white;
+    border: 2px solid black;
+    accent-color: blue;
+}
+label{
+    display: inline;
+    margin-left: 5px;
+    font-size: 2vh;
+    font-weight: 700;
+    color: black;  
+}
+#TagButton:hover{
+    transition: all 0.3s;
+    transform: scale(1.2);
+    background-color: black;
+    color: white;
+}
+#LoadMore:hover{
+    transition: all 0.3s;
+    transform: scale(1.2);
+    transform: translateX(50%);
+    background-color: white;
+    color: black;
+}
+#imgContainer{
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+#img{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    object-fit: cover;
+}
+#imgDes{
+    padding-bottom: 100px;
+    transform: translateY(-100%);
+    width: 34vh;
+}
+#imgDes:hover{
+    transform: translateY(-100%);
+}

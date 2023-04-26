@@ -15,7 +15,7 @@ export default function TagsPage(){
     var [movies, setMovies] = useState<Array<any>>([]);
     //If the page is loading, display this 
     var [loading, setLoading] = useState(Boolean);
-    
+    //
     var [searched, setSearched] = useState(false); 
     //List of favorite movies of user
     var [favoritesList, setFavorites] = useState<Array <Number> >([]);
@@ -132,8 +132,8 @@ export default function TagsPage(){
             </div>
             }
             <div className="flex border-r-4 border-black h-full w-2/12 justify-center flex-col">
-                <form className='fixed w-1/12 ml-10 mx-auto top-20'>
-                <h1 className="text-center text-black font-black text-3xl ml-10 ">Tags</h1>
+                <form className='fixed w-1/12 ml-10 mx-auto top-16'>
+                <h1 className="text-center text-black font-black text-3xl pb-3 ">Tags</h1>
                 <button id="TagButton"onClick={HandleSearch} className="bg-white h-10 w-5/6 text-center rounded-lg border-solid border-black border text-black text-lg font-500">Search</button><br></br>
 
                     <input type="checkbox" onChange={handleInput} id="28"/>

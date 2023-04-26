@@ -5,13 +5,19 @@ import './styles/Tags.css';
 import { Link } from 'react-router-dom';
 
 export default function TagsPage(){
+    //Input of Tags
     var [input, setInput] = useState<Array <String>>([]);
-    var [hasSearch, sethasSearch] = useState(false);
+   //Used to continually load more movies
     var [pageNo, setpageNo] = useState(1);
+    //Copy of tags that were searched to load continously on button click
     var [loadTags, SetloadTags] = useState('');
+    //Holds movie json objects
     var [movies, setMovies] = useState<Array<any>>([]);
+    //If the page is loading, display this 
     var [loading, setLoading] = useState(Boolean);
+    
     var [searched, setSearched] = useState(false); 
+    //List of favorite movies of user
     var [favoritesList, setFavorites] = useState<Array <Number> >([]);
 
     function HandleSearch(e: React.MouseEvent<HTMLButtonElement>){
@@ -39,22 +45,29 @@ export default function TagsPage(){
         });
     }
     
+    //Updates Favorites list based upon whether or not the favorite lists already has the movie id
     function updateFavLists(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         const value = parseInt(e.currentTarget.value);
-        console.log(value);
         setFavorites([...favoritesList, value]);
+        //Remove Favorite from list
         if(favoritesList.includes(value)){
             setFavorites(favoritesList.filter(item => item !== value));
+            //Code to remove from mongodb - tba
         }
-        console.log(favoritesList)
+        else{
+            //code to add to mongodb - tba
+            console.log(favoritesList)
+        }
     }
 
+    //Adds the tag number the user wants to search to an array
     function handleInput(e: React.ChangeEvent<HTMLInputElement>){
         var bool = e.target.checked;
         if(bool){
             setInput([...input, e.target.id]);
         }
+        //If user unclicks a tag to search, remove from array
         else{
             setInput(input.filter(item => item !== e.target.id));
         }

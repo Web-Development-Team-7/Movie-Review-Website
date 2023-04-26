@@ -2,7 +2,7 @@ import React from 'react';
 import './styles/login.css'
 import {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { EmailAuthCredential, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, provider} from '../Firebase'
 
 export default function SignUp(){
@@ -11,7 +11,17 @@ export default function SignUp(){
     var [password, setPass] = useState('');
     var [verify, setVerify] = useState('');
     const nav = useNavigate();
-    
+
+    /**
+    * Takes in a valid email and password input by the user, and registers them in our firebase database of users.
+    * Only takes in email and password as users can alternatively sign in with their google accounts, no registration
+    * necessary.
+    * @constructor
+    * @param {email, password} - Data binded to the input of email and password from user
+    * @param {createUserWithEmailAndPassword(auth, email, password)} - 
+    * Validates that the email and password is valid, then registers the email and password as users.
+    * If successful, reroute the user to the login page, if unsuccessful, display the error message in an alert.
+    */
     const Register = (event: React.MouseEvent<HTMLButtonElement>) =>{
         event.preventDefault();
         //Prompts user to input all fileds if error.

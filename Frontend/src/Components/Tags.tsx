@@ -20,6 +20,12 @@ export default function TagsPage(){
     //List of favorite movies of user
     var [favoritesList, setFavorites] = useState<Array <Number> >([]);
 
+    /**
+    * Initial search of the tags 
+    * @constructor
+    * @param {PageNo} - This variable is used in the query of api request to gather a certain amount of movie details.
+    * @param {loading} - Variable that conditionally renders a loading screen if a search request is in progress.
+    */
     function HandleSearch(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         var tagStr = input.toString();

@@ -45,20 +45,21 @@ export default function TagsPage(){
         });
     }
     
-    //Updates Favorites list based upon whether or not the favorite lists already has the movie id
-    function updateFavLists(e: React.MouseEvent<HTMLButtonElement>){
+    //Updates Favorites list with movie ID
+    function addFavLists(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         const value = parseInt(e.currentTarget.value);
         setFavorites([...favoritesList, value]);
-        //Remove Favorite from list
-        if(favoritesList.includes(value)){
-            setFavorites(favoritesList.filter(item => item !== value));
-            //Code to remove from mongodb - tba
-        }
-        else{
-            //code to add to mongodb - tba
-            console.log(favoritesList)
-        }
+        //Axios call to add to backend list
+        
+    }
+
+    //Updates Favorites List by removing matching movie id
+    function removeFavLists(e: React.MouseEvent<HTMLButtonElement>){
+        e.preventDefault();
+        const value = parseInt(e.currentTarget.value);
+        setFavorites(favoritesList.filter(item => item !== value));
+        //Axios call to remove from backend list
     }
 
     //Adds the tag number the user wants to search to an array
@@ -113,14 +114,14 @@ export default function TagsPage(){
                 {movies.map(item => {
                     return (
                         <>
-                        <div  id ="imgContainter" className="ml-4 mt-2">
+                        <div id ="imgContainter" className="ml-4 mt-2">
                             <img src={item.backdrop_path} alt = "Movie_Picture" id="img" className = "z-1 rounded-md" />
                             <div id="imgDes" className="h-40 bg-gray-900 bg-opacity-50 text-white z-2 transition-opacity duration-300 opacity-0 hover:opacity-100 absolute ">
                                 <p className="text-xl font-bold">{item.title}</p>
                                 <p className="text-sm">{item.release_date}</p>
-                                {favoritesList.includes(item.id) ? <button value = {item.id} onClick={updateFavLists} className="bg-red-500 text-center mt-2 h-2/12 text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-4/12 flex">Unfavorite</button>
+                                {favoritesList.includes(item.id) ? <button value = {item.id} onClick={removeFavLists} className="bg-red-500 text-center mt-2 h-2/12 text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-4/12 flex">Unfavorite</button>
                                 :
-                                <button value = {item.id} onClick={updateFavLists} className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex">Favorite</button>
+                                <button value = {item.id} onClick={addFavLists} className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex">Favorite</button>
                                 }
                                 <Link to={`/details?id=${item.id}`} className="text-white w-3/12 border border-black border-solid hover:bg-black hover:text-white hover:ease-in text-center absolute mt-10 bg-blue-500 rounded-md">Details</Link>
                             </div>
@@ -128,7 +129,7 @@ export default function TagsPage(){
                         </>
                     );
                     })}
-                <button id="LoadMore" onClick={ExpandSearch} className="mt-1 ml-96 bg-blue-500 translate-x-1/2 text-white font-black h-10 w-3/4 justify-center mb-5 text-center rounded-lg border-solid border-black border text-lg font-500">{pageNo}</button>
+                <button id="LoadMore" onClick={ExpandSearch} className="mt-1 ml-96 bg-blue-500 translate-x-1/2 text-white font-black h-10 w-3/4 justify-center mb-5 text-center rounded-lg border-solid border-black border text-lg font-500">Load More</button>
             </div>
             }
             <div className="flex border-r-4 border-black h-full w-2/12 justify-center flex-col">

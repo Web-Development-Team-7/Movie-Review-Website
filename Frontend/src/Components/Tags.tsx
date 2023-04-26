@@ -11,7 +11,8 @@ export default function TagsPage(){
     var [loadTags, SetloadTags] = useState('');
     var [movies, setMovies] = useState<Array<any>>([]);
     var [loading, setLoading] = useState(Boolean);
-    var [searched, setSearched] = useState(false);
+    var [searched, setSearched] = useState(false); 
+    var [favoritesList, setFavorites] = useState<Array <Number> >([]);
 
     function HandleSearch(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
@@ -38,9 +39,15 @@ export default function TagsPage(){
         });
     }
     
-    function hi(){
-        event?.preventDefault();
-        alert("Hi")
+    function updateFavLists(e: React.MouseEvent<HTMLButtonElement>){
+        e.preventDefault();
+        const value = parseInt(e.currentTarget.value);
+        console.log(value);
+        setFavorites([...favoritesList, value]);
+        if(favoritesList.includes(value)){
+            setFavorites(favoritesList.filter(item => item !== value));
+        }
+        console.log(favoritesList)
     }
 
     function handleInput(e: React.ChangeEvent<HTMLInputElement>){
@@ -98,8 +105,11 @@ export default function TagsPage(){
                             <div id="imgDes" className="h-40 bg-gray-900 bg-opacity-50 text-white z-2 transition-opacity duration-300 opacity-0 hover:opacity-100 absolute ">
                                 <p className="text-xl font-bold">{item.title}</p>
                                 <p className="text-sm">{item.release_date}</p>
-                                <button onClick={hi} className="bg-red-500 text-center text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-2/12 flex">Hi</button>
-                                <Link to={`/details?id=${item.id}`} className="text-black w-2/12 border border-black border-solid hover:bg-black hover:text-white hover:ease-in text-center absolute mt-10 bg-white rounded-md">Hello</Link>
+                                {favoritesList.includes(item.id) ? <button value = {item.id} onClick={updateFavLists} className="bg-red-500 text-center mt-2 h-2/12 text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-4/12 flex">Unfavorite</button>
+                                :
+                                <button value = {item.id} onClick={updateFavLists} className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex">Favorite</button>
+                                }
+                                <Link to={`/details?id=${item.id}`} className="text-white w-3/12 border border-black border-solid hover:bg-black hover:text-white hover:ease-in text-center absolute mt-10 bg-blue-500 rounded-md">Details</Link>
                             </div>
                         </div>
                         </>

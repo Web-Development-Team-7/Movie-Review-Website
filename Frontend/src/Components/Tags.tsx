@@ -2,9 +2,15 @@ import React, { useState,useEffect, ReactHTMLElement, ChangeEventHandler } from 
 import Navbar from './navbar';
 import axios from 'axios';
 import './styles/Tags.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
+import { getAuth } from "firebase/auth";
 
 export default function TagsPage(){
+    //Used to authenticate if the user is logged in before making any api request
+    const auth = getAuth();
+    const user = auth.currentUser;
+    //Used to redirect users if not logged in
+    const nav = useNavigate();
     //Input of Tags
     var [input, setInput] = useState<Array <String>>([]);
    //Used to continually load more movies
@@ -24,12 +30,19 @@ export default function TagsPage(){
     * Initial search of the tags 
     * @constructor
     * @param {PageNo} - This variable is used in the query of api request to gather a certain amount of movie details.
-    * @param {loading} - Variable that conditionally renders a loading screen if a search request is in progress.
+    * @param {loading} - Variable that conditionally renders a loading screen if a search request is in progress. 
+    * @param {user} - This variable verifies if the user is logged in or not, if it is null, the user is not logged in
+    *  and therefore, no api requests will be allowed.
     */
     function HandleSearch(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
         var tagStr = input.toString();
         setpageNo(pageNo = 1);
+        if(!user){
+            alert('Must Be Logged In');
+            nav('/');
+            return;
+        }
         setLoading(true);
         const data = {
             genre_ids: tagStr,
@@ -51,24 +64,54 @@ export default function TagsPage(){
         });
     }
     
-    //Updates Favorites list with movie ID
+      /**
+    * Adds movie IDs to the favorite list in mongodb.
+    * @constructor
+    * @param {value} - Variable that holds the integer value of the movie id of the user wishes to add.
+    * @param {favoritesList} - Variable that holds the movie ids of that the user has added to their favorite lists.
+    * @param {user} - This variable verifies if the user is logged in or not, if it is null, the user is not logged in
+    *  and therefore, no api requests will be allowed.
+    */
     function addFavLists(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
+        if(!user){
+            alert('Connection Expired, Please Log Back In');
+            nav('/');
+            return;
+        }
         const value = parseInt(e.currentTarget.value);
         setFavorites([...favoritesList, value]);
         //Axios call to add to backend list
         
     }
 
-    //Updates Favorites List by removing matching movie id
+    /**
+    * Removes movie id from favorites list in mongodb and frontend copy.
+    * @constructor
+    * @param {value} - Variable that holds the integer value of the movie id of the user wishes to add.
+    * @param {favoritesList} - Variable that holds the movie ids of that the user has added to their favorite lists. 
+    * @param {user} - This variable verifies if the user is logged in or not, if it is null, the user is not logged in
+    *  and therefore, no api requests will be allowed.
+    */
     function removeFavLists(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
+        if(!user){
+            alert('Connection Expired, Please Log Back In');
+            nav('/');
+            return;
+        }
         const value = parseInt(e.currentTarget.value);
         setFavorites(favoritesList.filter(item => item !== value));
         //Axios call to remove from backend list
     }
 
-    //Adds the tag number the user wants to search to an array
+    /**
+    * Adds the input of the genre ID to an array of numbers once a checkbox has been clicked. If the user unclicks a checkbox,
+    * the array removes the genre ID from the array.
+    * @constructor
+    * @param {bool} - Variable that declares if a checkbox was checked or not.
+    * @param {input} - An array of the genre IDs that the user wants to search up 
+    */
     function handleInput(e: React.ChangeEvent<HTMLInputElement>){
         var bool = e.target.checked;
         if(bool){
@@ -80,8 +123,20 @@ export default function TagsPage(){
         }
     }
 
+    /**
+    * Removes movie id from favorites list in mongodb and frontend copy.
+    * @constructor
+    * @param {loadTags} - A copy of the tags the user used in the initial search.
+    * @param {pageNo} - Variable that holds the current page of movies that is loaded
+    * @param {Movies} - This variable holds the json response of the moviedb, holds all the information on each movie.
+    * @param {loading} - If this variable is true, displays a loading screen while the request is processing.
+    */
     function ExpandSearch(e: React.MouseEvent<HTMLButtonElement>){
         e.preventDefault();
+        if(!user){
+            alert('Connection Expired, Please Log Back In');
+            nav('/');
+        }
         var tagStr = loadTags.toString();
         const data = {
             genre_ids: tagStr,

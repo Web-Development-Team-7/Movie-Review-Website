@@ -39,6 +39,12 @@ export default function AccountPage(){
     * as their display name and account photo from the local storage. It then reroutes them back into the log in page.
     */
     function LogOut(){
+      const user = auth.currentUser;
+      if(!user){
+        alert('Please Log In');
+        nav('/');
+        return;
+      }
         signOut(auth).then(() => {
             //Clears local storage of user information such as name and pfp.
             localStorage.clear();
@@ -67,7 +73,11 @@ export default function AccountPage(){
             return alert("Please Fill In Valid Value!");
         }
         const user = auth.currentUser;
-        
+        if(!user){
+          alert('Please Log In');
+          nav('/');
+          return;
+        }
         //Checks if the user is not null to prevent errors
         if(user!== null){
         //Updates username, and updates the display variable in frontend
@@ -102,6 +112,11 @@ export default function AccountPage(){
             return alert("Please Input Valid File");
         }
         const user = auth.currentUser;
+        if(!user){
+          alert('Please Log In');
+          nav('/');
+          return;
+        }
         
         //If the user is not null to satisfy typescript checking
         if(user!== null){
@@ -143,6 +158,11 @@ export default function AccountPage(){
     function DeleteUser(event: React.MouseEvent<HTMLButtonElement>){
         event?.preventDefault();
         const user = auth.currentUser;
+        if(!user){
+          alert('Please Log In');
+          nav('/');
+          return;
+        }
         if(user){
             deleteUser(user).then(() => {
                 //If successful, redirect user to login page
@@ -170,6 +190,11 @@ export default function AccountPage(){
             return alert("Please Fill In Valid Value!");
         }
         const user = auth.currentUser;
+        if(!user){
+          alert('Please Log In');
+          nav('/');
+          return;
+        }
         
         if(user!== null){
             updatePassword(user, ChangePass).then(() => {

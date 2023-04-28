@@ -168,7 +168,7 @@ app.get('/getTop/', async function (req, res) {
         url: 'https://advanced-movie-search.p.rapidapi.com/movies/getdetails',
         params: {movie_id: req.params.query},
         headers: {
-          'X-RapidAPI-Key': '47d048e09dmsh82922bd4aa60f6ep15bd6bjsnf22dbc12cd4b',
+          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };

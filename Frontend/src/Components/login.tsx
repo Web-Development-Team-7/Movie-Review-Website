@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles/login.css'
 import {useState} from 'react';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword  } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, EmailAuthCredential  } from 'firebase/auth';
 import { auth, provider} from '../Firebase'
 import {Link, useNavigate} from 'react-router-dom';
 
@@ -11,7 +11,12 @@ export default function Login(){
     var [password, setPass] = useState('');
     const nav = useNavigate();
     
-    //Sign in with google authentication
+    /**
+    * On click, opens a pop up where users can sign in with their google account
+    * @constructor
+    * @param {signInWithPopUp(auth, provider)} - Validates the user signing in, and saves their information such as
+    * user name, account photo, and id to local storage.
+     */
     const GoogleSignIn = () =>{
         event?.preventDefault();
         //Open a pop up tab that allows users to sign in with user accounts
@@ -34,7 +39,14 @@ export default function Login(){
         })
     }
 
-    //If user wants to sign in with just email and password.
+    /**
+    * Signs in a user by validating their email and password
+    * @constructor
+    * @param {email, password} - Data that is binded to the input of the user email and password
+     * @param {signInWithEmailAndPassword(auth, email, password)} - 
+     * Validates that the user email exists, and the password matches in firebase. If the prior all returns true,
+     * authorizes the user to enter the database by rerouting them to the homepage.
+     */
     const UserSignIn = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         //Check if user input fields correctly.
@@ -63,6 +75,7 @@ export default function Login(){
         })
     }
 
+    //Returns the login form componenet
     return(
         <React.Fragment>
            <div className='flex justify-center w-full' id = "LogFlex">

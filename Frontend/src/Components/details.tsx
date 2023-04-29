@@ -180,6 +180,56 @@ const movieDetails = {
 
   );
 }
+<<<<<<< HEAD
+=======
+type Comment = {
+    _id: number;
+    username: string;
+    comment: string;
+};
+function CommentSection({ movieID }: { movieID: number }) {
+    const [comments, setComments] = useState<Comment[]>([]);
+  
+    function fetchComments(){
+        const url = 'http://localhost:5678/comments/'+movieID;
+        axios.get(url).then((res) => {
+            alert('HI')
+            setComments(res.data);
+            
+      }).catch((err) => {
+        alert(err);
+      });
+    }
+
+    useEffect(() => {
+  
+      fetchComments();
+    }, []);
+  
+    return (
+      <div>
+        <h2>Comments</h2>
+        {comments.map(comment => (
+          <div key={comment._id}>
+            <h3>{comment.username}</h3>
+            <p>{comment.comment}</p>
+          </div>
+        ))}
+      </div>
+    );
+}
+  
+  
+  
+  
+  
+  
+
+// Renders the movie details page of a selected movie
+ export default function MoviePage() {
+        const [movie, setMovie] = useState<Movie>();
+        var id = localStorage.getItem('uid');
+>>>>>>> baaa5a6269815a3deb3bf3fbce7ee24183ec61bb
 
     useEffect(() => {
         const fetchData = async () => {

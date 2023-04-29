@@ -3,31 +3,32 @@ import { Fragment, useState, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { getAuth, signOut } from "firebase/auth"
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useLocation, Link} from 'react-router-dom'
 
 const navigation = [
-  { name: 'Home', href: '/home', current: true },
-  { name: 'Account', href: '/account', current: false },
-  { name: 'Favorite', href: '#', current: false },
-  { name: 'Tags', href: '/tags', current: false },
+  { name: 'Home', href: '/home' },
+  { name: 'Account', href: '/account' },
+  { name: 'Favorite', href: '#' },
+  { name: 'Tags', href: '/tags' },
 ]
 
-
-function classNames(...classes : Array<Object>) {
+function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
   const nav = useNavigate();
   const auth = getAuth();
+  const location = useLocation();
   var [photo, setPhoto] = useState('');
+  const [query, setQuery] = useState('')
 
   useEffect( () => {
     var temp = localStorage.getItem('photo');
     if(temp){
       setPhoto(temp);
     }
-  })
+  }, [])
 
   function LogOut(){
     signOut(auth).then(() => {
@@ -36,7 +37,8 @@ export default function Navbar() {
      }).catch((error) => {
         alert("An Error Has Occured!");
     });
-}
+  }
+  
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -65,10 +67,10 @@ export default function Navbar() {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          location.pathname === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={location.pathname === item.href ? 'page' : undefined}
                       >
                         {item.name}
                       </a>
@@ -82,6 +84,15 @@ export default function Navbar() {
                   className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] text-white outline outline-2 transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                   id="exampleSearch2"
                   placeholder="Search" 
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter'){
+                      alert("Yay");
+                      window.location.href = 'http://localhost:3000/search?q=' + encodeURIComponent(query);
+                    }
+                    
+                  }}
                 />
 
                 {/* Profile dropdown */}

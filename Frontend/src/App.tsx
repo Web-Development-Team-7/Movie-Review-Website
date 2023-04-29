@@ -9,6 +9,7 @@ import AccountPage from './Components/Account'
 import Favorite from './Components/Favorite'
 import Navbar from './Components/navbar'
 import TagsPage from './Components/Tags'
+import SearchResults from './Components/search'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path = '/home' element={<HomePage />}/>
         <Route path = '/Signup' element={<SignUp />}/>
         <Route path = '/details' element={<MoviePage />}/>
+        <Route path = '/search' element={<SearchResults/>}/>
         <Route path = '/account' element={<AccountPage />}/>
         <Route path = '/favorite' element={<Favorite />}/>
         <Route path = '/tags' element={<TagsPage />}/>

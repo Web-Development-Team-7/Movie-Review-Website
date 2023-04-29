@@ -18,7 +18,7 @@ app.use(cors({
 }));
 
 // This sets uri to the mongoURL in the .env file
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const uri = process.env.mongoURL
 console.log(uri)
@@ -33,8 +33,6 @@ dbMongo.on('error', console.error.bind(console, 'connection error:'));
 dbMongo.once('open', function() {
   console.log('Connected to MongoDB');
 });
-
-// This is the schema for the comment database
 const commentSchema = new mongoose.Schema({
   userID: {
     type: String,
@@ -57,63 +55,92 @@ const commentSchema = new mongoose.Schema({
     default: 0,
   }
 })
+const Comment = mongoose.model('Comment', commentSchema);
+const movieSchema = new mongoose.Schema({
+  adult: Boolean,
+  backdrop_path: String,
+  genre_ids: [Number],
+  id: Number,
+  original_language: String,
+  original_title: String,
+  overview: String,
+  popularity: Number,
+  poster_path: String,
+  release_date: String,
+  title: String,
+  video: Boolean,
+  vote_average: Number,
+  vote_count: Number,
+});
 
-// This is the schema for the comment database
+const subFavorite = new mongoose.Schema({
+  movieID: {
+    type: Number,
+    required: true
+  },
+  otherModelField: {
+    type: movieSchema,
+  }
+});
+
 const FavoriteSchema = new mongoose.Schema({
   userID: {
     type: String,
     required: true,
   },
-  movieIDList:{
-    type:[Number]
-  }
-})
+  movie:{
+    type: [subFavorite],
+  },
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
 const Favorite = mongoose.model('Favorites', FavoriteSchema);
 
-const Comment = mongoose.model('Comment', commentSchema);
-
 app.post('/favorites', async function (req, res) {
-  console.log(req.body);
-  
   try {
-    let x =(req.body.uid);
-    console.log(x)
-    let doc = await Favorite.findOne({userID: x});
-    console.log(doc)
-  if(doc === null){
-    console.log("non-existant");
-
-    let favorite = new Favorite({
-      movieIDList: [parseInt(req.body.movieID)],
-      userID: x
-    });
-
-    await favorite.save();
-
-    console.log("added?")
-
-    res.status(200).send("created a favorites list");
-  }else{
-    if(doc.movieIDList.includes(req.body.movieID)){
-      res.status(200).send("already added to favorites");
-    }else{
-      console.log("existing")
-      doc.movieIDList.push(req.body.movieID)
-      doc.save();
-      res.status(200).send("updated favorites list");
+    let x = req.body.uid;
+    console.log(x);
+    console.log(req.body);
+    let doc = await Favorite.findOne({ userID: x });
+    console.log(doc);
+    if (doc === null) {
+      console.log("non-existant");
+      let favorite = new Favorite({
+        userID: x,
+        movie: [{
+          movieID: req.body.movie.movieID,
+          otherModelField: req.body.movie.movieDetails
+        }]
+      });
+      console.log("Before the Save?");
+      favorite.save();
+      console.log("added?");
+      res.status(200).send("created a favorites list");
+    } else {
+      if (doc.movie.some(m => m.movieID === req.body.movie.movieID)) {
+        res.status(200).send("already added to favorites");
+      } else {
+        console.log("existing");
+        doc.movie.push({
+          movieID: req.body.movie.movieID,
+          otherModelField: req.body.movie.movieDetails
+        });
+        await doc.save();
+        res.status(200).send("updated favorites list");
+      }
     }
-    
-  }}catch (err) {
+  } catch (err) {
     res.status(400).json({ message: err.message });
   }
-})
+});
+
 app.get('/getFavorites/:uid', async function (req, res) {
 try{
   console.log(req.params.uid)
   let doc = await Favorite.findOne({userID: req.params.uid});
-  let movieIDList= doc.movieIDList
+  // let movieIDList= doc.movieIDList
   console.log(doc)
-  let movieList=[]
+  // let movieList=[]
 
   // for(let i=0;i<movieIDList.length;i++){
   //   console.log(movieIDList[i])
@@ -156,7 +183,7 @@ app.get('/getTop/', async function (req, res) {
   //let students = await Model.find({last_name:req.params.lastname});
   const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {
-      api_key: '5e072d084652ab8ef66bf80de30d4235',
+      api_key: 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
       language: 'en-US',
       page: 1,
     },
@@ -199,7 +226,7 @@ app.get('/getTop/', async function (req, res) {
         url: 'https://advanced-movie-search.p.rapidapi.com/discover/movie',
         params: {with_genres: genre_id , page: page_no},
         headers: {
-          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+          'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };
@@ -240,7 +267,7 @@ app.get('/getTop/', async function (req, res) {
         url: 'https://advanced-movie-search.p.rapidapi.com/movies/getdetails',
         params: {movie_id: req.params.query},
         headers: {
-          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+          'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };
@@ -265,7 +292,7 @@ app.get('/getTop/', async function (req, res) {
         },
         headers: {
           'content-type': 'application/octet-stream',
-          'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+          'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
           'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
         }
       };

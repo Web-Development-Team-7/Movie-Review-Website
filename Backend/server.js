@@ -184,8 +184,9 @@ app.get('/movies/:query', (req, res) => {
   });
 });
 
-app.post('/search/:movie_name', async (req, res) => {
+app.get('/search/:movie_name', async (req, res) => {
   const movie_name = req.params.movie_name;
+  console.log(req.params.movie_name)
   const options = {
     method: 'GET',
     url: 'https://advanced-movie-search.p.rapidapi.com/search/movie',

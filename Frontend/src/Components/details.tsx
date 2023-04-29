@@ -108,7 +108,7 @@ type Comment = {
     _id: number;
     username: string;
     comment: string;
-  };
+};
 function CommentSection({ movieID }: { movieID: number }) {
     const [comments, setComments] = useState<Comment[]>([]);
   
@@ -139,7 +139,7 @@ function CommentSection({ movieID }: { movieID: number }) {
         ))}
       </div>
     );
-  }
+}
   
   
   

@@ -18,18 +18,21 @@ app.use(cors({
 }));
 
 // This sets uri to the mongoURL in the .env file
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const uri = process.env.mongoURL
+console.log(uri)
 // This starts the connection to the database
-//mongoose.connect(uri)
+mongoose.connect(uri)
 
 // This is the connection to the database
-//const dbMongo = mongoose.connection;
+const dbMongo = mongoose.connection;
 
 // This is the error handling for the connection
-// dbMongo.on('error', console.error.bind(console, 'connection error:'));
-// dbMongo.once('open', function() {
-//   console.log('Connected to MongoDB');
-// });
+dbMongo.on('error', console.error.bind(console, 'connection error:'));
+dbMongo.once('open', function() {
+  console.log('Connected to MongoDB');
+});
 
 // This is the schema for the comment database
 const commentSchema = new mongoose.Schema({
@@ -55,9 +58,78 @@ const commentSchema = new mongoose.Schema({
   }
 })
 
-// Model for the comment data
+// This is the schema for the comment database
+const FavoriteSchema = new mongoose.Schema({
+  userID: {
+    type: String,
+    required: true,
+  },
+  movieIDList:{
+    type:[Number]
+  }
+})
+const Favorite = mongoose.model('Favorites', FavoriteSchema);
+
 const Comment = mongoose.model('Comment', commentSchema);
 
+app.post('/favorites', async function (req, res) {
+  console.log(req.body);
+  
+  try {
+    let x =(req.body.uid);
+    console.log(x)
+    let doc = await Favorite.findOne({userID: x});
+    console.log(doc)
+  if(doc === null){
+    console.log("non-existant");
+
+    let favorite = new Favorite({
+      movieIDList: [parseInt(req.body.movieID)],
+      userID: x
+    });
+
+    await favorite.save();
+
+    console.log("added?")
+
+    res.status(200).send("created a favorites list");
+  }else{
+    if(doc.movieIDList.includes(req.body.movieID)){
+      res.status(200).send("already added to favorites");
+    }else{
+      console.log("existing")
+      doc.movieIDList.push(req.body.movieID)
+      doc.save();
+      res.status(200).send("updated favorites list");
+    }
+    
+  }}catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+})
+app.get('/getFavorites/:uid', async function (req, res) {
+try{
+  console.log(req.params.uid)
+  let doc = await Favorite.findOne({userID: req.params.uid});
+  let movieIDList= doc.movieIDList
+  console.log(doc)
+  let movieList=[]
+
+  // for(let i=0;i<movieIDList.length;i++){
+  //   console.log(movieIDList[i])
+
+    //   await axios.get(`http://localhost:5678/movies/${movieIDList[i]}`).then((res) => {
+    //   console.log(res.data);
+    // });  
+  // }
+  // console.log()
+  res.status(200).send(movieList)
+    // res.status(200).send("cham")
+
+}catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+})
 app.post('/comment', async function (req, res) {
   console.log(req.body);
   const comment = new Comment({
@@ -68,7 +140,7 @@ app.post('/comment', async function (req, res) {
     date: req.body.date,
     likes: req.body.likes
   });
-  try {
+  try{
     const newComment = await comment.save();
     res.status(201).json(newComment);
   } catch (err) {
@@ -187,7 +259,7 @@ app.get('/getTop/', async function (req, res) {
         method: 'GET',
         url: 'https://advanced-movie-search.p.rapidapi.com/search/movie',
         params: {
-          query: 'Avengers',
+          query: 'Mar',
           // query: movie_name,
           page: '1'
         },

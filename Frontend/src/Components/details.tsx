@@ -70,8 +70,61 @@ const movieDetails = {
 
 
 
-function CommentForm({ movieID }: { movieID: number }) {
-  const [comment, setComment] = useState('');
+
+
+/**
+ * <form onSubmit={handleSubmit}>
+      <textarea value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Write a comment..." />
+      <button type="submit">Submit</button>
+    </form>
+ */
+
+  
+  
+  
+  
+  
+
+// Renders the movie details page of a selected movie
+ export default function MoviePage() {
+        const [movie, setMovie] = useState<Movie>();
+        var id = localStorage.getItem('uid');
+
+        type Comment = {
+            _id: number;
+            username: string;
+            comment: String;
+          };
+          
+            const currentURL = window.location.href;
+            const result = currentURL.slice(33);
+            var movieID = parseInt(result);
+            const [comments, setComments] = useState<Comment[]>([]);
+            const [loading, setLoading] = useState<boolean>(true);
+          
+            function fetchComments(){
+                setLoading(true);
+                console.log(setLoading)
+                const url = 'http://localhost:5678/comments/'+movieID;
+                axios.get(url).then((res) => {
+                    //alert('HI')
+                    setComments(res.data);
+                    setLoading(false);
+              }).catch((err) => {
+                alert(err);
+              });
+            }
+        
+            useEffect(() => {
+          
+              fetchComments();
+            }, []);
+          
+           
+          
+
+    function CommentForm({ movieID }: { movieID: number }) {
+  const [comment, setComment] = useState<String>('');
   var uname = localStorage.getItem('user');
   const currentURL = window.location.href;
   const result = currentURL.slice(33);
@@ -83,12 +136,20 @@ function CommentForm({ movieID }: { movieID: number }) {
     if(comment === ''){
         return alert('Please enter a comment')
     }
+    const x = {
+        _id: 0,
+        username: uname,
+        movieID: movieID,
+        comment: comment,
+        _v: 0
+    }
     console.log(payload)
     var url = 'http://localhost:5678/comment';
     axios.post(url, payload).then((res) => {
-        console.log(res)
+        console.log(x)
         event.target.reset();
-        alert('Success');
+        setComments(comments => [...comments, x]);
+        //alert('Success');
         setComment('');
     }).catch((err) => {
         alert('Error');
@@ -98,59 +159,27 @@ function CommentForm({ movieID }: { movieID: number }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Write a comment..." />
-      <button type="submit">Submit</button>
-    </form>
+<div className="flex mx-auto items-center justify-center shadow-lg mt-10 mx-8 mb-4 max-w-md">
+   <form className="w-full max-w-xl bg-white rounded-lg px-4 pt-2" onSubmit={handleSubmit}>
+      <div className="flex flex-wrap -mx-3 mb-6">
+         <h2 className="px-4 pt-3 pb-2 text-gray-800 text-lg">Add a new comment</h2>
+         <div className="w-full md:w-full px-3 mb-2 mt-2">
+            <textarea className="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="body"value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Write a comment..."></textarea>
+         </div>
+         <div className="w-full md:w-full flex items-start md:w-full px-3">
+            <div className="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
+            </div>
+            <div className="-mr-1">
+               <button className="bg-white text-gray-700 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100" type="submit">Post Comment</button>
+            </div>
+         </div>
+         </div>
+      </form>
+   </div>
+   
+
   );
 }
-type Comment = {
-    _id: number;
-    username: string;
-    comment: string;
-  };
-function CommentSection({ movieID }: { movieID: number }) {
-    const [comments, setComments] = useState<Comment[]>([]);
-  
-    function fetchComments(){
-        const url = 'http://localhost:5678/comments/'+movieID;
-        axios.get(url).then((res) => {
-            alert('HI')
-            setComments(res.data);
-            
-      }).catch((err) => {
-        alert(err);
-      });
-    }
-
-    useEffect(() => {
-  
-      fetchComments();
-    }, []);
-  
-    return (
-      <div>
-        <h2>Comments</h2>
-        {comments.map(comment => (
-          <div key={comment._id}>
-            <h3>{comment.username}</h3>
-            <p>{comment.comment}</p>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  
-  
-  
-  
-  
-  
-
-// Renders the movie details page of a selected movie
- export default function MoviePage() {
-        const [movie, setMovie] = useState<Movie>();
-        var id = localStorage.getItem('uid');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -178,7 +207,14 @@ function CommentSection({ movieID }: { movieID: number }) {
                 </div>
                 <section className='info'>    
                     <React.Fragment>
+                        <div>
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+                        <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Bungee+Shade&display=swap" rel="stylesheet" />
                         <h1 className='text-2xl'>{movie?.title}</h1>
+
+                        </div>
+                   
                     </React.Fragment>
 
                     <React.Fragment>
@@ -209,24 +245,39 @@ function CommentSection({ movieID }: { movieID: number }) {
                 
                 
                 <React.Fragment>
-                <section id="comment-section">
-                    <CommentSection movieID={movie.id}/>
-                </section>
+                <div id="comment-section">
+                    <CommentForm movieID={movie.id} />
+                    <div className="bg-gray-100 p-6">
+            <h2 className="text-lg font-bold mb-4">Comments</h2>
+            {loading ? (
+        <p>Loading comments...</p>
+      ) : (
+            comments.map(comment => (
+            <div className="flex flex-col space-y-4" key={comment._id}>
+                <div className="bg-white p-4 rounded-lg shadow-md">
+                    <h3 className="text-lg font-bold">{comment.username}</h3>
+                    <p className="text-gray-700 text-sm mb-2">{comment.comment}</p>
+                    
+                </div>
+            </div>
+            ))
+                
+      )}</div>
+                </div>
                 </React.Fragment>
-                     <React.Fragment>
-            <section id="comment-section">
-              <CommentForm movieID={movie.id} />
-            </section>
+            <React.Fragment>
+            
           </React.Fragment>
         </body>
       </React.Fragment>
     )
-    else{
-        return (
-            <>
-                <h1>Vladimiar Putin</h1>
-            </>
-        )
-    }
+    // else{
+    //     return (
+    //         <>
+    //             <h1>Vladimiar Putin</h1>
+    //         </>
+    //     )
+    // }
+    
 }
 

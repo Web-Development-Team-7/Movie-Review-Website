@@ -130,7 +130,7 @@ app.post('/tags', function (req, res) {
     url: 'https://advanced-movie-search.p.rapidapi.com/discover/movie',
     params: { with_genres: genre_id, page: page_no },
     headers: {
-      'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+      'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
       'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
     }
   };
@@ -171,7 +171,7 @@ app.get('/movies/:query', (req, res) => {
     url: 'https://advanced-movie-search.p.rapidapi.com/movies/getdetails',
     params: { movie_id: req.params.query },
     headers: {
-      'X-RapidAPI-Key': '0a51dbb737msh24f7f6ca1389daep1efa5bjsndcf7ac74473d',
+      'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
       'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
     }
   };

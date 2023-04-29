@@ -65,9 +65,93 @@ const movieDetails = {
     actors: ["Robert Downey Jr.", "Chris Evans", "Mark Ruffalo", "Chris Hemsworth", "Scarlett Johansson", "Jeremy Renner", "Don Cheadle", "Paul Rudd", "Brie Larson", "Karen Gillan", "Danai Gurira", "Benedict Wong", "Jon Favreau", "Bradley Cooper", "Gwyneth Paltrow", "Josh Brolin"],
     comments: ["Trash", "BEST THING I'VE EVER SEEN", "Waste of money and time", "Mediocre", "Not too shabby"]
 }
+
+
+
+
+
+function CommentForm({ movieID }: { movieID: number }) {
+  const [comment, setComment] = useState('');
+  var uname = localStorage.getItem('user');
+  const currentURL = window.location.href;
+  const result = currentURL.slice(33);
+  var movieID = parseInt(result);
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>){
+    event.preventDefault();
+    const payload = { movieID, comment, uname };
+    if(comment === ''){
+        return alert('Please enter a comment')
+    }
+    console.log(payload)
+    var url = 'http://localhost:5678/comment';
+    axios.post(url, payload).then((res) => {
+        console.log(res)
+        event.target.reset();
+        alert('Success');
+        setComment('');
+    }).catch((err) => {
+        alert('Error');
+        console.log(err.response.data);
+    });
+    
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <textarea value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Write a comment..." />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+type Comment = {
+    _id: number;
+    username: string;
+    comment: string;
+  };
+function CommentSection({ movieID }: { movieID: number }) {
+    const [comments, setComments] = useState<Comment[]>([]);
+  
+    function fetchComments(){
+        const url = 'http://localhost:5678/comments/'+movieID;
+        axios.get(url).then((res) => {
+            alert('HI')
+            setComments(res.data);
+            
+      }).catch((err) => {
+        alert(err);
+      });
+    }
+
+    useEffect(() => {
+  
+      fetchComments();
+    }, []);
+  
+    return (
+      <div>
+        <h2>Comments</h2>
+        {comments.map(comment => (
+          <div key={comment._id}>
+            <h3>{comment.username}</h3>
+            <p>{comment.comment}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  
+  
+  
+  
+  
+  
+
 // Renders the movie details page of a selected movie
-export default function MoviePage() {
+ export default function MoviePage() {
         const [movie, setMovie] = useState<Movie>();
+        var id = localStorage.getItem('uid');
+
     useEffect(() => {
         const fetchData = async () => {
             const currentURL = window.location.href;
@@ -123,13 +207,19 @@ export default function MoviePage() {
                 
                 </section>
                 
+                
                 <React.Fragment>
                 <section id="comment-section">
                     <CommentSection movieID={movie.id}/>
                 </section>
                 </React.Fragment>
-                </body>
-        </React.Fragment>
+                     <React.Fragment>
+            <section id="comment-section">
+              <CommentForm movieID={movie.id} />
+            </section>
+          </React.Fragment>
+        </body>
+      </React.Fragment>
     )
     else{
         return (
@@ -140,44 +230,3 @@ export default function MoviePage() {
     }
 }
 
-function CommentSection(props) {
-    console.log(props.movieID)
-    const [comment, setComment] = useState('');
-    const [userID, setUserID] = useState('');
-    const movieID = props.movieID;
-    
-
-    function submitHandler(e) {
-        e.preventDefault();
-        console.log(comment);
-        console.log(userID);
-        console.log(movieID);
-
-        const url = 'http://localhost:5678/comment';
-        const data = {
-            comment: comment,
-            userID: userID,
-            movieID: movieID
-        }
-        axios.post(url, data).then(res => {
-            console.log(res);
-            e.target.reset();
-            console.log("Comment submitted!")
-
-        }).catch(err => {
-            console.log(err);
-        })
-    }
-
-    return(
-        
-        <React.Fragment>
-            <h1>Comments {props.movieID}</h1>
-            <form id='comment-form' onSubmit={submitHandler} method='POST'>
-                <input type='text' placeholder='User ID' value={userID} onChange={(e) => setUserID(e.target.value)} /><br></br>
-                <input type='text' placeholder='Comment' value={comment} onChange={(e) => setComment(e.target.value)} />
-                <button type='submit' onClick="postComment()">Submit</button>
-            </form>
-        </React.Fragment>
-    )
-}

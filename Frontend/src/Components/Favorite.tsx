@@ -40,11 +40,11 @@ const Favorite=()=>{
 
   function removeFavLists(e: React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
-    if(!user){
-        alert('Connection Expired, Please Log Back In');
-        nav('/');
-        return;
-    }
+    // if(!user){
+    //     alert('Connection Expired, Please Log Back In');
+    //     nav('/');
+    //     return;
+    // }
     const value = parseInt(e.currentTarget.value);
     
     let deleteHandler=async ()=>{
@@ -60,6 +60,7 @@ const Favorite=()=>{
 
     }
     setFavoritesIDList(favortitesIDList.filter(item => item !== value));
+    setFavoritesList(favoritesList.filter((item:Movie) => item.id !== value));
     deleteHandler();
     //Axios call to remove from backend list
 }

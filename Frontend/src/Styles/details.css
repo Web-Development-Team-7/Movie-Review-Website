@@ -13,6 +13,13 @@
   transition: all 0.3s ease;
 }
 
+h1{
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-family: 'Bruno Ace SC', cursive;
+  font-size: 100px;
+}
+
 .comment-section {
   display: flex;
   flex-direction: column;

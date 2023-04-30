@@ -1,0 +1,24 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+#results-container{
+    /* display: flex; */
+    /* flex-direction: row; */
+    overflow: hidden;
+}
+#img{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    object-fit: cover;
+}
+#resDes{
+    padding-bottom: 100px;
+    transform: translateY(-100%);
+    width: 34vh;
+}
+#resDes:hover{
+    transform: translateY(-100%);
+}

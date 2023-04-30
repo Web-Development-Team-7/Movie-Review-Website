@@ -237,7 +237,14 @@ export default function TagsPage(){
             }
             <div className="flex border-r-4 border-black h-full w-2/12 justify-center flex-col">
                 <form className='fixed w-1/12 ml-10 mx-auto top-16'>
-                <h1 className="text-center text-black font-black text-3xl pb-3 ">Tags</h1>
+                <div>
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+                        <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Bungee+Shade&display=swap" rel="stylesheet" />
+                        <h1 className="text-center text-black font-black text-3xl pb-3 ">Tags</h1>
+
+                        </div>
+                
                 <button id="TagButton"onClick={HandleSearch} className="bg-white h-10 w-5/6 text-center rounded-lg border-solid border-black border text-black text-lg font-500">Search</button><br></br>
 
                     <input type="checkbox" onChange={handleInput} id="28"/>

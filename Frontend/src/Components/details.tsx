@@ -66,25 +66,6 @@ const movieDetails = {
     comments: ["Trash", "BEST THING I'VE EVER SEEN", "Waste of money and time", "Mediocre", "Not too shabby"]
 }
 
-
-
-
-
-
-
-/**
- * <form onSubmit={handleSubmit}>
-      <textarea value={comment} onChange={(event) => setComment(event.target.value)} placeholder="Write a comment..." />
-      <button type="submit">Submit</button>
-    </form>
- */
-
-  
-  
-  
-  
-  
-
 // Renders the movie details page of a selected movie
  export default function MoviePage() {
         const [movie, setMovie] = useState<Movie>();
@@ -101,6 +82,7 @@ const movieDetails = {
             var movieID = parseInt(result);
             const [comments, setComments] = useState<Comment[]>([]);
             const [loading, setLoading] = useState<boolean>(true);
+            const [actors,setActors]=useState<Array <string> >([]);
           
             function fetchComments(){
                 setLoading(true);
@@ -191,12 +173,17 @@ const movieDetails = {
             console.log(res)
             setMovie(res.data)
         };
+        const getActors=async ()=>{
+            let res=await axios.get('http://localhost:5678/actors/'+result)
+            setActors(res.data.split(", "));
+            console.log(res.data.split(", "))
+        }
+        getActors();
         fetchData();
     }, []);
 
     if (movie)
-    return(
-        
+    return(    
         <React.Fragment>
             <Navbar/>
             <body>
@@ -227,7 +214,7 @@ const movieDetails = {
                         <section id="actor-list">
                             <p>Actors: </p>
                             <ul>
-                                {movieDetails.actors.map((actor, index) => (
+                                {actors.map((actor, index) => (
                                     <li key={index}>{actor}</li>
                                 ))}
                             </ul>
@@ -271,12 +258,5 @@ const movieDetails = {
         </body>
       </React.Fragment>
     )
-    // else{
-    //     return (
-    //         <>
-    //             <h1>Vladimiar Putin</h1>
-    //         </>
-    //     )
-    // }
-    
+
 }

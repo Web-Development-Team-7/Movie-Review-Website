@@ -190,7 +190,7 @@ export default function TagsPage(){
        const getFavorites=async ()=>{
         let uid=localStorage.getItem('uid')
         let res= await axios.get('http://localhost:5678/getFavorites/'+uid)
-        let data= res.data.map(movie => movie.movieID);
+        let data= res.data.map((movie:any) => movie.movieID);
         console.log(data)
         console.log(res)
         setFavorites(data)

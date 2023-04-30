@@ -88,7 +88,6 @@ export default function Navbar() {
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter'){
-                      alert("Yay");
                       window.location.href = 'http://localhost:3000/search?q=' + encodeURIComponent(query);
                     }
                     

@@ -10,13 +10,14 @@ import Favorite from './Components/Favorite'
 import Navbar from './Components/navbar'
 import TagsPage from './Components/Tags'
 import SearchResults from './Components/search'
-
+import LandingPage from './Components/LandingPage'
 function App() {
 
   return (
     <React.Fragment>
       <Routes>
-        <Route path = '/' element={<Login />}/>
+        <Route path = '/' element={<LandingPage/>}/>
+        <Route path = '/login' element={<Login />}/>
         <Route path = '/home' element={<HomePage />}/>
         <Route path = '/Signup' element={<SignUp />}/>
         <Route path = '/details' element={<MoviePage />}/>

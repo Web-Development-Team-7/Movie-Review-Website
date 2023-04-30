@@ -219,7 +219,6 @@ app.get('/actors/:movie_id', (req, res) => {
       return;
     }
     const data = JSON.parse(body);
-
     // Extract the list of actors from the API response
     const actors = data.cast.map(actor => actor.name);
     const limitedActors = actors.slice(0, 20);

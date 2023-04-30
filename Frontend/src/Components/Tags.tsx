@@ -43,11 +43,14 @@ export default function TagsPage(){
             nav('/');
             return;
         }
+        
         setLoading(true);
+
         const data = {
             genre_ids: tagStr,
             page: pageNo
         };
+
         var url = "http://localhost:5678/tags";
         if(input.length === 0){
             return alert("Please Select A Tag")
@@ -72,17 +75,32 @@ export default function TagsPage(){
     * @param {user} - This variable verifies if the user is logged in or not, if it is null, the user is not logged in
     *  and therefore, no api requests will be allowed.
     */
-    function addFavLists(e: React.MouseEvent<HTMLButtonElement>){
+    let postHandler=async (value: number, item:any)=>{
+
+        let uid=localStorage.getItem('uid')
+
+        let data={
+            movie:{
+                movieID:value,
+                movieDetails:item
+            },
+            uid:uid
+        }
+
+        const response = await axios.post('http://localhost:5678/favorites', data);
+        setFavorites([...favoritesList,value]);
+
+    }
+    function addFavLists(e: React.MouseEvent<HTMLButtonElement>, item:any){
         e.preventDefault();
         if(!user){
             alert('Connection Expired, Please Log Back In');
             nav('/');
             return;
         }
+        console.log(item)
         const value = parseInt(e.currentTarget.value);
-        setFavorites([...favoritesList, value]);
-        //Axios call to add to backend list
-        
+        postHandler(value, item);        
     }
 
     /**
@@ -101,7 +119,21 @@ export default function TagsPage(){
             return;
         }
         const value = parseInt(e.currentTarget.value);
+        
+        let deleteHandler=async ()=>{
+
+            let uid=localStorage.getItem('uid')
+
+            let data={
+                uid:uid,
+                movieID:value
+            }
+
+            const response = await axios.post('http://localhost:5678/deleteFavorites', data);
+
+        }
         setFavorites(favoritesList.filter(item => item !== value));
+        deleteHandler();
         //Axios call to remove from backend list
     }
 
@@ -154,7 +186,17 @@ export default function TagsPage(){
             alert(error.response.data.message)
         });
     }
-    
+    useEffect(()=>{
+       const getFavorites=async ()=>{
+        let uid=localStorage.getItem('uid')
+        let res= await axios.get('http://localhost:5678/getFavorites/'+uid)
+        let data= res.data.map(movie => movie.movieID);
+        console.log(data)
+        console.log(res)
+        setFavorites(data)
+       }
+       getFavorites()
+    },[])
     return(
         <React.Fragment>
             <div>
@@ -182,7 +224,7 @@ export default function TagsPage(){
                                 <p className="text-sm">{item.release_date}</p>
                                 {favoritesList.includes(item.id) ? <button value = {item.id} onClick={removeFavLists} className="bg-red-500 text-center mt-2 h-2/12 text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-4/12 flex">Unfavorite</button>
                                 :
-                                <button value = {item.id} onClick={addFavLists} className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex">Favorite</button>
+                                <button value = {item.id} onClick={(e) => addFavLists(e,item)} className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex">Favorite</button>
                                 }
                                 <Link to={`/details?id=${item.id}`} className="text-white w-3/12 border border-black border-solid hover:bg-black hover:text-white hover:ease-in text-center absolute mt-10 bg-blue-500 rounded-md">Details</Link>
                             </div>

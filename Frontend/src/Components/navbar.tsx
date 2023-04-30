@@ -3,23 +3,23 @@ import { Fragment, useState, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { getAuth, signOut } from "firebase/auth"
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useLocation} from 'react-router-dom'
 
 const navigation = [
-  { name: 'Home', href: '/home', current: true },
-  { name: 'Account', href: '/account', current: false },
-  { name: 'Favorite', href: '#', current: false },
-  { name: 'Tags', href: '/tags', current: false },
+  { name: 'Home', href: '/home' },
+  { name: 'Account', href: '/account' },
+  { name: 'Favorite', href: '#' },
+  { name: 'Tags', href: '/tags' },
 ]
 
-
-function classNames(...classes : Array<Object>) {
+function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
   const nav = useNavigate();
   const auth = getAuth();
+  const location = useLocation();
   var [photo, setPhoto] = useState('');
 
   useEffect( () => {
@@ -27,7 +27,7 @@ export default function Navbar() {
     if(temp){
       setPhoto(temp);
     }
-  })
+  }, [])
 
   function LogOut(){
     signOut(auth).then(() => {
@@ -36,7 +36,8 @@ export default function Navbar() {
      }).catch((error) => {
         alert("An Error Has Occured!");
     });
-}
+  }
+  
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -65,10 +66,10 @@ export default function Navbar() {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          location.pathname === item.href ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}
-                        aria-current={item.current ? 'page' : undefined}
+                        aria-current={location.pathname === item.href ? 'page' : undefined}
                       >
                         {item.name}
                       </a>

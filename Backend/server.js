@@ -96,6 +96,29 @@ const FavoriteSchema = new mongoose.Schema({
 const Movie = mongoose.model('Movie', movieSchema);
 const Favorite = mongoose.model('Favorites', FavoriteSchema);
 
+app.post('/deleteFavorites', async function (req, res) {
+  try {
+    let userID = req.body.uid;
+    var movieID= req.body.movieID;
+    // console.log(req.body);
+    console.log(movieID);
+    let doc = await Favorite.findOne({userID:userID});
+    // console.log(doc.movie[0])
+    let data=[]
+    for(let i=0;i<doc.movie.length;i++){
+      if(doc.movie[i].movieID!==movieID){
+        data.push(doc.movie[i])
+      }
+    }
+    console.log(data)
+    doc.movie=data;
+    doc.save();
+    res.status(200).send(doc);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 app.post('/favorites', async function (req, res) {
   try {
     let x = req.body.uid;
@@ -138,21 +161,8 @@ app.get('/getFavorites/:uid', async function (req, res) {
 try{
   console.log(req.params.uid)
   let doc = await Favorite.findOne({userID: req.params.uid});
-  // let movieIDList= doc.movieIDList
-  console.log(doc)
-  // let movieList=[]
-
-  // for(let i=0;i<movieIDList.length;i++){
-  //   console.log(movieIDList[i])
-
-    //   await axios.get(`http://localhost:5678/movies/${movieIDList[i]}`).then((res) => {
-    //   console.log(res.data);
-    // });  
-  // }
-  // console.log()
-  res.status(200).send(movieList)
-    // res.status(200).send("cham")
-
+  console.log(doc.movie)
+  res.status(200).send(doc.movie)
 }catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -183,7 +193,7 @@ app.get('/getTop/', async function (req, res) {
   //let students = await Model.find({last_name:req.params.lastname});
   const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {
-      api_key: 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
+      api_key: '5e072d084652ab8ef66bf80de30d4235',
       language: 'en-US',
       page: 1,
     },

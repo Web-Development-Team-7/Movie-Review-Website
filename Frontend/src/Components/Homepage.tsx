@@ -76,7 +76,7 @@ let HomePage = () => {
           <Link to= {`/details?id=${item.id}`}>
             <img src={`https://image.tmdb.org/t/p/w400/${item.backdrop_path}`} alt={item.title} className="photo"/>
 
-          <div className="absolute bottom-3 left-3 right-3 bg-gray-900 bg-opacity-50 py-20 px-6 text-white transition-opacity duration-300 opacity-0 hover:opacity-100">
+            <div className="absolute bottom-3 left-3 right-3 bg-gray-900 bg-opacity-50 py-20 px-6 text-white transition-opacity duration-300 opacity-0 hover:opacity-100">
             <p className="text-xl font-bold">{item.title}</p>
             <p className="text-sm">{item.release_date}</p>
           </div>

@@ -190,7 +190,6 @@ const saltRounds = 10;
 
 app.get('/getTop/', async function (req, res) {
   // View all students if no query parameters are provided
-  //let students = await Model.find({last_name:req.params.lastname});
   const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {
       api_key: '5e072d084652ab8ef66bf80de30d4235',
@@ -200,7 +199,6 @@ app.get('/getTop/', async function (req, res) {
   });
   const movies = response.data.results.slice(0, 50);
   res.status(200).send(movies);
-  
 });
 
 

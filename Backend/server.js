@@ -18,7 +18,10 @@ app.use(cors({
 }));
 
 // This sets uri to the mongoURL in the .env file
+// const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const uri = process.env.mongoURL
+console.log(uri)
 // This starts the connection to the database
 mongoose.connect(uri)
 
@@ -27,11 +30,11 @@ const dbMongo = mongoose.connection;
 
 // This is the error handling for the connection
 dbMongo.on('error', console.error.bind(console, 'connection error:'));
-dbMongo.once('open', function () {
+
+dbMongo.once('open', function() {
   console.log('Connected to MongoDB');
 });
 
-// This is the schema for the comment database
 const commentSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -46,10 +49,118 @@ const commentSchema = new mongoose.Schema({
     required: true,
   }
 })
-
-// Model for the comment data
 const Comment = mongoose.model('Comment', commentSchema);
+const movieSchema = new mongoose.Schema({
+  adult: Boolean,
+  backdrop_path: String,
+  genre_ids: [Number],
+  id: Number,
+  original_language: String,
+  original_title: String,
+  overview: String,
+  popularity: Number,
+  poster_path: String,
+  release_date: String,
+  title: String,
+  video: Boolean,
+  vote_average: Number,
+  vote_count: Number,
+});
 
+const subFavorite = new mongoose.Schema({
+  movieID: {
+    type: Number,
+    required: true
+  },
+  otherModelField: {
+    type: movieSchema,
+  }
+});
+
+const FavoriteSchema = new mongoose.Schema({
+  userID: {
+    type: String,
+    required: true,
+  },
+  movie:{
+    type: [subFavorite],
+  },
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
+const Favorite = mongoose.model('Favorites', FavoriteSchema);
+
+app.post('/deleteFavorites', async function (req, res) {
+  try {
+    let userID = req.body.uid;
+    var movieID= req.body.movieID;
+    // console.log(req.body);
+    console.log(movieID);
+    let doc = await Favorite.findOne({userID:userID});
+    // console.log(doc.movie[0])
+    let data=[]
+    for(let i=0;i<doc.movie.length;i++){
+      if(doc.movie[i].movieID!==movieID){
+        data.push(doc.movie[i])
+      }
+    }
+    console.log(data)
+    doc.movie=data;
+    doc.save();
+    res.status(200).send(doc);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.post('/favorites', async function (req, res) {
+  try {
+    let x = req.body.uid;
+    console.log(x);
+    console.log(req.body);
+    let doc = await Favorite.findOne({ userID: x });
+    console.log(doc);
+    if (doc === null) {
+      console.log("non-existant");
+      let favorite = new Favorite({
+        userID: x,
+        movie: [{
+          movieID: req.body.movie.movieID,
+          otherModelField: req.body.movie.movieDetails
+        }]
+      });
+      console.log("Before the Save?");
+      favorite.save();
+      console.log("added?");
+      res.status(200).send("created a favorites list");
+    } else {
+      if (doc.movie.some(m => m.movieID === req.body.movie.movieID)) {
+        res.status(200).send("already added to favorites");
+      } else {
+        console.log("existing");
+        doc.movie.push({
+          movieID: req.body.movie.movieID,
+          otherModelField: req.body.movie.movieDetails
+        });
+        await doc.save();
+        res.status(200).send("updated favorites list");
+      }
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.get('/getFavorites/:uid', async function (req, res) {
+try{
+  console.log(req.params.uid)
+  let doc = await Favorite.findOne({userID: req.params.uid});
+  console.log(doc.movie)
+  res.status(200).send(doc.movie)
+}catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+})
 app.post('/comment', async function (req, res) {
   //console.log(req.body);
   const data = await Comment.create({
@@ -57,6 +168,7 @@ app.post('/comment', async function (req, res) {
     movieID: req.body.movieID,
     comment: req.body.comment
   });
+
   try {
     await data.save();
     console.log('hi')
@@ -84,7 +196,6 @@ const saltRounds = 10;
 
 app.get('/getTop/', async function (req, res) {
   // View all students if no query parameters are provided
-  //let students = await Model.find({last_name:req.params.lastname});
   const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {
       api_key: '5e072d084652ab8ef66bf80de30d4235',
@@ -94,7 +205,6 @@ app.get('/getTop/', async function (req, res) {
   });
   const movies = response.data.results.slice(0, 50);
   res.status(200).send(movies);
-
 });
 
 
@@ -108,7 +218,6 @@ app.get('/actors/:movie_id', (req, res) => {
       res.status(500).send('Internal Server Error');
       return;
     }
-
     const data = JSON.parse(body);
 
     // Extract the list of actors from the API response

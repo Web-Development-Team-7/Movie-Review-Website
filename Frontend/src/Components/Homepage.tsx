@@ -25,7 +25,8 @@ interface Movie {
 }
 
 let HomePage = () => {
-  
+  const [favoritesList, setFavorites] = useState<Array <Number> >([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [topMovie, setTopMovie]=useState<Movie[]>([]);
   //const[genre, setGenre] = useState([]);
@@ -39,18 +40,60 @@ let HomePage = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+  function removeFavLists(e: React.MouseEvent<HTMLButtonElement>){
+    e.preventDefault();
+    const value = parseInt(e.currentTarget.value);
+    
+    let deleteHandler=async ()=>{
 
-  const getTop = async () => {
-    try {
-      const response = await axios.get('http://localhost:5678/getTop');
-      console.log(response.data)
-      await setTopMovie(response.data);
-      console.log(topMovie); // logs the updated state
-      console.log(response.data); 
-    } catch (error) {
-      console.log(error);
+        let uid=localStorage.getItem('uid')
+
+        let data={
+            uid:uid,
+            movieID:value
+        }
+
+        const response = await axios.post('http://localhost:5678/deleteFavorites', data);
+
     }
-  };
+    setFavorites(favoritesList.filter(item => item !== value));
+    deleteHandler();
+    //Axios call to remove from backend list
+}
+  let postHandler=async (value: number, item:any)=>{
+
+    let uid=localStorage.getItem('uid')
+
+    let data={
+        movie:{
+            movieID:value,
+            movieDetails:item
+        },
+        uid:uid
+    }
+
+    const response = await axios.post('http://localhost:5678/favorites', data);
+    setFavorites([...favoritesList,value]);
+
+  }
+  function addFavLists(e: React.MouseEvent<HTMLButtonElement>, item:any){
+    e.preventDefault();
+    console.log(item)
+    const value = parseInt(e.currentTarget.value);
+    postHandler(value, item);        
+  }
+
+    const getTop = async () => {
+      try {
+        const response = await axios.get('http://localhost:5678/getTop');
+        console.log(response.data)
+        await setTopMovie(response.data);
+        console.log(topMovie); // logs the updated state
+        console.log(response.data); 
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
   
 
@@ -58,11 +101,18 @@ let HomePage = () => {
     getTop();
   }, []);
 
+  useEffect(()=>{
+    const getFavorites=async ()=>{
+      let uid=localStorage.getItem('uid')
+      let res= await axios.get('http://localhost:5678/getFavorites/'+uid)
+      let data= res.data.map((movie:any) => movie.movieID);
+      console.log(data)
+      console.log(res)
+      setFavorites(data)
+     }
+     getFavorites()
+  },[])
   
-  
-  useEffect(() => {
-    console.log(topMovie);
-  }, [topMovie]);
   
   return (
 <React.Fragment>
@@ -84,6 +134,10 @@ let HomePage = () => {
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((item, index) => (
         <div key={index} className="relative">
+        {favoritesList.includes(item.id) ? <button value = {item.id} onClick={removeFavLists} className="bg-red-500 text-center mt-2 h-2/12 text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-4/12 flex">Unfavorite</button>
+        :
+        <button value = {item.id} onClick={(e) => addFavLists(e,item)} className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex">Favorite</button>
+        }
           <Link to= {`/details?id=${item.id}`}>
             <img src={`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`} alt={item.title} className="photo"/>
 

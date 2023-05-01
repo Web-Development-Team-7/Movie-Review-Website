@@ -122,7 +122,7 @@ function addFavLists(e: React.MouseEvent<HTMLButtonElement>, item:any){
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Bungee+Shade&display=swap" rel="stylesheet" />
   
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white font-bungee-shade">Top 20 Trending Movies</h1>
+        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white font-bungee-shade">Favorite Movies</h1>
       </div>
        
     <div id='moviecontainer'>

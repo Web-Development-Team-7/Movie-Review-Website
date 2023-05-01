@@ -134,20 +134,37 @@ let HomePage = () => {
       .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
       .map((item, index) => (
         <div key={index} className="relative">
-        {favoritesList.includes(item.id) ? <button value = {item.id} onClick={removeFavLists} className="bg-red-500 text-center mt-2 h-2/12 text-black justify-center border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-white w-4/12 flex">Unfavorite</button>
-        :
-        <button value = {item.id} onClick={(e) => addFavLists(e,item)} className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-3 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex">Favorite</button>
-        }
-          <Link to= {`/details?id=${item.id}`}>
-            <img src={`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`} alt={item.title} className="photo"/>
+          {favoritesList.includes(item.id) ? (
+    <button
+      value={item.id}
+      onClick={removeFavLists}
+      className="bg-red-500 text-center mt-2 h-2/12 text-black justify-center border border-solid border-black hover:ease-in z-10 absolute rounded-md hover:bg-white w-4/12 flex"
+    >
+      Unfavorite
+    </button>
+  ) : (
+    <button
+      value={item.id}
+      onClick={(e) => addFavLists(e, item)}
+      className="bg-white h-2/12 text-center text-black justify-center mt-2 border border-solid border-black hover:ease-in z-10 absolute rounded-md hover:bg-red-500 hover:text-black w-3/12 flex"
+    >
+      Favorite
+    </button>
+  )}
+  <Link to={`/details?id=${item.id}`}>
+    <img
+      src={`https://image.tmdb.org/t/p/w300/${item.backdrop_path}`}
+      alt={item.title}
+      className="photo"
+    />
+    <div className="absolute bottom-3 left-3 right-3 bg-gray-900 bg-opacity-50 py-10 px-10 text-white transition-opacity duration-300 opacity-0 hover:opacity-100">
+      <p className="text-xl font-bold">{item.title}</p>
+      <p className="text-sm">{item.release_date}</p>
+    </div>
+  </Link>
 
+</div>
 
-          <div className="absolute bottom-3 left-3 right-3 bg-gray-900 bg-opacity-50 py-10 px-10 text-white transition-opacity duration-300 opacity-0 hover:opacity-100">
-            <p className="text-xl font-bold">{item.title}</p>
-            <p className="text-sm">{item.release_date}</p>
-          </div>
-          </Link>
-        </div>
       ))
     }
   </ul>

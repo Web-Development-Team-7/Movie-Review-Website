@@ -162,7 +162,7 @@ try{
   }
 })
 app.post('/comment', async function (req, res) {
-  //console.log(req.body);
+  console.log(req.body);
   const data = await Comment.create({
     username: req.body.uname,
     movieID: req.body.movieID,
@@ -172,9 +172,9 @@ app.post('/comment', async function (req, res) {
   try {
     await data.save();
     console.log('hi')
-    res.status(201).send("jomama");
+    res.status(201).send("Comment Added");
   } catch (err) {
-    console.log('bye')
+    console.log('Error')
     res.status(400).json({ message: err.message });
   }
 })

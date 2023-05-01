@@ -6,7 +6,7 @@ import Navbar from './navbar';
 
 
 
-
+// This interface is used to define the structure of the movie object
 interface Movie {
   adult: boolean;
   backdrop_path: string;
@@ -24,22 +24,40 @@ interface Movie {
   vote_count: number;
 }
 
+// This function is used to display the homepage of the website
 let HomePage = () => {
+  // This is the state that is used to store the list of favorites
   const [favoritesList, setFavorites] = useState<Array <Number> >([]);
-
+  // This is the state that is used to store the list of top movies
   const [currentPage, setCurrentPage] = useState(1);
+  // This is the state that is used to store the list of top movies
   const [topMovie, setTopMovie]=useState<Movie[]>([]);
   //const[genre, setGenre] = useState([]);
+  // This is the state that is used to store the list of top movies 
+  //that are currently being displayed
   const itemsPerPage = 10;
-  
+  // This is the state that is used to store the list of top movies
   const totalPages = Math.ceil(topMovie.length / itemsPerPage);
+  // This is the state that is used to store the list of top movies
   const startIndex = (currentPage - 1) * itemsPerPage;
+  // This is the state that is used to store the list of top movies
   const endIndex = startIndex + itemsPerPage;
+  // This is the state that is used to store the list of top movies
   const currentItems = topMovie.slice(startIndex, endIndex);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  /**
+   * This function is used to retrieve the list of top movies
+   * @constructor
+   * @param {value} - This is the movie id of the movie that is to be added to the favorites list
+   * @param {item} - This is the movie object of the movie that is to be added to the favorites list
+   * @param {data} - This is the data that is to be sent to the backend
+   * @param {e} - The event that is triggered when the user clicks the remove button
+   *  This function is used to remove the movie from the favorites list
+   */
   function removeFavLists(e: React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
     const value = parseInt(e.currentTarget.value);
@@ -60,6 +78,14 @@ let HomePage = () => {
     deleteHandler();
     //Axios call to remove from backend list
 }
+
+
+/**
+ *  This function is called when the user clicks the add button
+ * @param value - This is the movie id of the movie that is to be added to the favorites list
+ * @param item - This is the movie object of the movie that is to be added to the favorites list
+ * @param uid - This is the user id of the user whose favorites are to be retrieved
+ */
   let postHandler=async (value: number, item:any)=>{
 
     let uid=localStorage.getItem('uid')
@@ -76,13 +102,28 @@ let HomePage = () => {
     setFavorites([...favoritesList,value]);
 
   }
+  /**
+   * @constructor
+   * @param e - The event that is triggered when the user clicks the add button
+   * @param item - The movie object of the movie that is to be added to the favorites list
+   * @param value - The movie id of the movie that is to be added to the favorites list
+   *  
+   */
+  // This function is used to get the top movies from the backend
   function addFavLists(e: React.MouseEvent<HTMLButtonElement>, item:any){
     e.preventDefault();
     console.log(item)
     const value = parseInt(e.currentTarget.value);
     postHandler(value, item);        
   }
-
+    // This function is used to get the top 20 movies from the backend
+    /**
+     * @constructor
+     * @param {response} - This is the response that is received from the backend
+     * @param {data} - This is the data that is received from the backend
+     * @param {setTopMovie} - This is the state that is used to store the list of top movies
+     * 
+     */
     const getTop = async () => {
       try {
         const response = await axios.get('http://localhost:5678/getTop');
@@ -102,6 +143,15 @@ let HomePage = () => {
   }, []);
 
   useEffect(()=>{
+    /***
+     * This function is used to get the favorites from the backend
+     * @constructor
+     * @param {uid} - This is the user id of the user whose favorites are to be retrieved
+     * @param {res} - This is the response that is received from the backend
+     * @param {data} - This is the data that is received from the backend
+     * @param {setFavorites} - This is the state that is used to store the list of favorites
+     * 
+     */
     const getFavorites=async ()=>{
       let uid=localStorage.getItem('uid')
       let res= await axios.get('http://localhost:5678/getFavorites/'+uid)

@@ -4,7 +4,7 @@ import Navbar from './navbar';
 import { getAuth } from "firebase/auth";
 import { Link, useNavigate} from 'react-router-dom';
 
-
+//Interface for movie object
 interface Movie {
   adult: boolean;
   backdrop_path: string;
@@ -23,6 +23,20 @@ interface Movie {
   _id:string
 }
 
+/**
+ * @constructor
+ * @param {value} - This is the movie id of the movie that is to be added to the favorites list
+ * @param {auth} - This is the authentication object that is used to check if the user is logged in
+ * @param {user} - This is the user object that is used to check if the user is logged in
+ * @param {favoritesList} - This is the state that is used to store the list of favorites
+ * @param {setFavoritesList} - This is the state that is used to store the list of favorites
+ * @param {favoritesIDList} - This is the state that is used to store the list of favorites
+ * @param {setFavoritesIDList} - This is the state that is used to store the list of favorites
+ * @param {nav} - This is the state that is used to store the list of favorites
+ * This function is used to retrieve the list of favorites from the backend
+ * @returns This function is used to display the favorites page
+ */
+
 const Favorite=()=>{
   const auth = getAuth();
   var user = auth.currentUser;
@@ -32,12 +46,17 @@ const Favorite=()=>{
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 10;
-  
+  // This is the state that is used to store the list of top movies
   const totalPages = Math.ceil(favoritesList.length / itemsPerPage);
+  // This is the state that is used to store the list of top movies
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = favoritesList.slice(startIndex, endIndex);
-
+  /**
+   * 
+   * @param {e} - This is the event that is used to remove the movie from the favorites list
+   * This function is used to remove the movie from the favorites list
+   */
   function removeFavLists(e: React.MouseEvent<HTMLButtonElement>){
     e.preventDefault();
     // if(!user){
@@ -45,8 +64,10 @@ const Favorite=()=>{
     //     nav('/');
     //     return;
     // }
+    //
     const value = parseInt(e.currentTarget.value);
-    
+
+    //Axios call to remove from backend list
     let deleteHandler=async ()=>{
 
         let uid=localStorage.getItem('uid')
@@ -59,11 +80,14 @@ const Favorite=()=>{
         const response = await axios.post('http://localhost:5678/deleteFavorites', data);
 
     }
+    //This is the state that is used to store the list of favorites
     setFavoritesIDList(favortitesIDList.filter(item => item !== value));
     setFavoritesList(favoritesList.filter((item:Movie) => item.id !== value));
     deleteHandler();
     //Axios call to remove from backend list
 }
+
+
 let postHandler=async (value: number, item:any)=>{
   let uid=localStorage.getItem('uid')
 
@@ -79,6 +103,7 @@ let postHandler=async (value: number, item:any)=>{
   setFavoritesIDList([...favortitesIDList,value]);
 
 }
+//This function is used to add the movie to the favorites list
 function addFavLists(e: React.MouseEvent<HTMLButtonElement>, item:any){
   e.preventDefault();
   if(!user){
@@ -90,7 +115,7 @@ function addFavLists(e: React.MouseEvent<HTMLButtonElement>, item:any){
   const value = parseInt(e.currentTarget.value);
   postHandler(value, item);        
 }
-
+  
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };

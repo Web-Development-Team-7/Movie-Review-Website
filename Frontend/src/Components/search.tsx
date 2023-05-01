@@ -17,8 +17,9 @@ export default function SearchResults() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const itemsPerPage = 10;
-    
+    //This is used to calculate the number of pages needed to display all the movies
     const totalPages = Math.ceil(movies.length / itemsPerPage);
+    //This is used to calculate the start and end index of the movies to be displayed
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentItems = movies.slice(startIndex, endIndex);

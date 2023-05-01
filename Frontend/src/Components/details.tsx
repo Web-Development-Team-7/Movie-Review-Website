@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 // import "./details.css"
 
+//This interface is used to define the structure of the movie object
 interface Movie {
     adult: boolean;
     backdrop_path: string;
@@ -66,24 +67,54 @@ const movieDetails = {
     comments: ["Trash", "BEST THING I'VE EVER SEEN", "Waste of money and time", "Mediocre", "Not too shabby"]
 }
 
-// Renders the movie details page of a selected movie
- export default function MoviePage() {
-        const [movie, setMovie] = useState<Movie>();
-        var id = localStorage.getItem('uid');
 
+/**
+ * Renders the movie details page of a selected movie
+ * @constructor
+ * @param {Movie} movie - The movie object that contains all the details of the movie
+ * @param {number} id - The id of the movie
+ * @param {string} title - The title of the movie
+ * @param {string} release_date - The release date of the movie
+ * @param {number} vote_average - The average vote of the movie
+ * @param {number} vote_count - The number of votes of the movie
+ * @param {string[]} genres - The genres of the movie
+ * @param {string} synopsis - The synopsis of the movie
+ * @param {string[]} actors - The actors of the movie
+ * 
+ * @returns 
+ */
+ export default function MoviePage() {  
+        //This is the state that stores the movie object
+        const [movie, setMovie] = useState<Movie>();
+        //This is the state that stores the id of the movie
+        var id = localStorage.getItem('uid');
+         //This is the state that stores the comments array
         type Comment = {
             _id: number;
             username: string;
             comment: String;
           };
           
+            //This is the state that stores the loading state of the page
             const currentURL = window.location.href;
+            //This is the state that stores the result of the current URL
             const result = currentURL.slice(33);
+            //This is the state that stores the id of the movie
             var movieID = parseInt(result);
+            //This is the state that stores the comments array
             const [comments, setComments] = useState<Comment[]>([]);
+            //This is the state that stores the loading state of the page
             const [loading, setLoading] = useState<boolean>(true);
+            //This is the state that stores the actors array
             const [actors,setActors]=useState<Array <string> >([]);
           
+            /**
+             * This function is used to fetch the movie details from the backend
+             * @constructor
+             * @param {movieID} - The id of the movie
+             * @param {setLoading} - The loading state of the page
+             * @param {setComments} - The comments array
+            */
             function fetchComments(){
                 setLoading(true);
                 console.log(setLoading)
@@ -104,13 +135,34 @@ const movieDetails = {
           
            
           
-
+    /**
+     * This function is used to fetch the movie details from the backend
+     * @constructor
+     * @param {movieID} - The id of the movie
+     * @param {comment} - The comment of the movie
+     * @param {uname} - The username of the user
+     * @param {result} - The result of the current URL
+     * @returns 
+     */
     function CommentForm({ movieID }: { movieID: number }) {
   const [comment, setComment] = useState<String>('');
   var uname = localStorage.getItem('user');
   const currentURL = window.location.href;
   const result = currentURL.slice(33);
   var movieID = parseInt(result);
+
+  /**
+   * 
+   * @param {event} - The event of the form
+   * @param {payload} - The payload of the form data
+   * @param {x} - The object that contains the comment data to be added to the comments array
+   * @param {setComments} - The function that sets the comments array
+   * @param {setComment} - The function that sets the comment
+   * @param {url} - The url of the backend
+   * @param {comment} - The comment of the movie
+   * 
+   * @returns 
+   */
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>){
     event.preventDefault();
@@ -164,6 +216,16 @@ const movieDetails = {
 }
 
     useEffect(() => {
+        /**
+         * This function is used to fetch the movie details from the backend
+         * @constructor
+         * @param {currentURL} - The current URL of the page
+         * @param {result} - The result of the current URL
+         * @param {res} - The response of the backend
+         * @param {setMovie} - The function that sets the movie
+         * 
+         * 
+         */
         const fetchData = async () => {
             const currentURL = window.location.href;
             console.log(currentURL);
@@ -173,6 +235,14 @@ const movieDetails = {
             console.log(res)
             setMovie(res.data)
         };
+        /**
+         * This function is used to fetch the actors of the movie from the backend
+         * @constructor
+         * @param {result} - The result of the current URL
+         * @param {res} - The response of the backend
+         * @param {setActors} - The function that sets the actors
+         * 
+         */
         const getActors=async ()=>{
             let res=await axios.get('http://localhost:5678/actors/'+result)
             setActors(res.data.split(", "));

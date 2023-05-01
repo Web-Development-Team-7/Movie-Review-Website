@@ -198,7 +198,7 @@ app.get('/getTop/', async function (req, res) {
   // View all students if no query parameters are provided
   const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
     params: {
-      api_key: '5e072d084652ab8ef66bf80de30d4235',
+      api_key: process.env.movieDB_API_KEY,
       language: 'en-US',
       page: 1,
     },
@@ -209,7 +209,8 @@ app.get('/getTop/', async function (req, res) {
 
 
 app.get('/actors/:movie_id', (req, res) => {
-  const MOVIEDB_API_KEY = '5e072d084652ab8ef66bf80de30d4235';
+  const MOVIEDB_API_KEY = process.env.movieDB_API_KEY
+  ;
   const MOVIE_ID = req.params.movie_id; // Replace with the ID of the movie you want to get the actors for
   // Make a GET request to the moviedb API to get the cast details for the movie
   request.get(`https://api.themoviedb.org/3/movie/${MOVIE_ID}/credits?api_key=${MOVIEDB_API_KEY}`, (error, response, body) => {
@@ -238,7 +239,7 @@ app.post('/tags', function (req, res) {
     url: 'https://advanced-movie-search.p.rapidapi.com/discover/movie',
     params: { with_genres: genre_id, page: page_no },
     headers: {
-      'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
+      'X-RapidAPI-Key': process.env.Rapid_API_KEY,
       'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
     }
   };
@@ -279,7 +280,7 @@ app.get('/movies/:query', (req, res) => {
     url: 'https://advanced-movie-search.p.rapidapi.com/movies/getdetails',
     params: { movie_id: req.params.query },
     headers: {
-      'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
+      'X-RapidAPI-Key': process.env.Rapid_API_KEY,
       'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
     }
   };
@@ -305,7 +306,7 @@ app.get('/search/:movie_name', async (req, res) => {
     },
     headers: {
       'content-type': 'application/octet-stream',
-      'X-RapidAPI-Key': 'f7b66bb4a3mshb21dfc9604496ebp163455jsn1c8776f87de3',
+      'X-RapidAPI-Key': process.env.Rapid_API_KEY,
       'X-RapidAPI-Host': 'advanced-movie-search.p.rapidapi.com'
     }
   };

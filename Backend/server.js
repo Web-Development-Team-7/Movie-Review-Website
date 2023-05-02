@@ -49,7 +49,27 @@ const commentSchema = new mongoose.Schema({
     required: true,
   }
 })
+//This is the schema for the comments
 const Comment = mongoose.model('Comment', commentSchema);
+/**
+ * This is the schema for the movies
+ * @constructor
+ * @param {Boolean} adult - This is a boolean value that determines if the movie is for adults
+ * @param {String} backdrop_path - This is the path to the backdrop image
+ * @param {Array} genre_ids - This is an array of the genre ids
+ * @param {Number} id - This is the id of the movie
+ * @param {String} original_language - This is the original language of the movie
+ * @param {String} original_title - This is the original title of the movie
+ * @param {String} overview - This is the overview of the movie
+ * @param {Number} popularity - This is the popularity of the movie
+ * @param {String} poster_path - This is the path to the poster image
+ * @param {String} release_date - This is the release date of the movie
+ * @param {String} title - This is the title of the movie 
+ * @param {Boolean} video - This is a boolean value that determines if the movie has a video
+ * @param {Number} vote_average - This is the average vote of the movie
+ * @param {Number} vote_count - This is the number of votes for the movie
+ * 
+ */
 const movieSchema = new mongoose.Schema({
   adult: Boolean,
   backdrop_path: String,
@@ -67,6 +87,13 @@ const movieSchema = new mongoose.Schema({
   vote_count: Number,
 });
 
+/**
+ * This is the schema for the users
+ * @constructor
+ * @param {movieID} movieID - This is the id of the movie
+ * @param {otherModelField} otherModelField - This is the movieSchema
+ * 
+ */
 const subFavorite = new mongoose.Schema({
   movieID: {
     type: Number,
@@ -86,10 +113,21 @@ const FavoriteSchema = new mongoose.Schema({
     type: [subFavorite],
   },
 });
-
+// This is the model for the movies
 const Movie = mongoose.model('Movie', movieSchema);
+// This is the model for the users
 const Favorite = mongoose.model('Favorites', FavoriteSchema);
 
+/**
+ * HTTP POST request handler to delete a movie from a user's favorites list
+ *
+ * @param {Object} req - HTTP request object
+ * @param {Object} req.body - HTTP request body object containing userID and movieID
+ * @param {string} req.body.uid - userID of the user whose favorites list will be updated
+ * @param {string} req.body.movieID - movieID of the movie to be deleted from the user's favorites list
+ * @param {Object} res - HTTP response object
+ * @throws {Object} err - HTTP error response object
+ */
 app.post('/deleteFavorites', async function (req, res) {
   try {
     let userID = req.body.uid;
@@ -112,7 +150,18 @@ app.post('/deleteFavorites', async function (req, res) {
     res.status(400).json({ message: err.message });
   }
 });
-
+/**
+ * HTTP POST request handler to add a movie to a user's favorites list
+ *
+ * @param {Object} req - HTTP request object
+ * @param {Object} req.body - HTTP request body object containing userID and movie details
+ * @param {string} req.body.uid - userID of the user whose favorites list will be updated
+ * @param {Object} req.body.movie - movie details object containing movieID and movieDetails
+ * @param {string} req.body.movie.movieID - movieID of the movie to be added to the user's favorites list
+ * @param {Object} req.body.movie.movieDetails - movie details object containing details of the movie to be added to the user's favorites list
+ * @param {Object} res - HTTP response object
+ * @throws {Object} err - HTTP error response object
+ */
 app.post('/favorites', async function (req, res) {
   try {
     let x = req.body.uid;
@@ -150,7 +199,17 @@ app.post('/favorites', async function (req, res) {
     res.status(400).json({ message: err.message });
   }
 });
+/**
 
+Handles GET request to get favorites of a user with a specific id.
+@function
+@async
+@param {object} req - The HTTP request object.
+@param {object} res - The HTTP response object.
+@param {string} req.params.uid - The user ID.
+@throws {object} Error message if there is an issue getting the user's favorite movie.
+@returns {object} The user's favorite movie.
+*/
 app.get('/getFavorites/:uid', async function (req, res) {
 try{
   console.log(req.params.uid)
@@ -179,6 +238,18 @@ app.post('/comment', async function (req, res) {
   }
 })
 
+/**
+
+Handles GET request to get favorites of a user with a specific id.
+@function
+@async
+@param {object} req - The HTTP request object.
+@param {object} res - The HTTP response object.
+@param {string} req.params.uid - The user ID.
+@throws {object} Error message if there is an issue getting the user's favorite movie.
+@returns {object} The user's favorite movie.
+*/
+
 app.get('/comments/:movieID', async function(req, res) {
   var com = Comment;
   try {
@@ -194,6 +265,14 @@ app.get('/comments/:movieID', async function(req, res) {
 //Have option to Sign in Without Google, used to encrypt Passwords
 const saltRounds = 10;
 
+/**
+
+Retrieves a list of top-rated movies from The Movie Database API.
+@route GET /getTop
+@returns {Array} An array of movie objects
+@throws {Error} 400 - If an error occurs while retrieving data from the API
+*/
+
 app.get('/getTop/', async function (req, res) {
   // View all students if no query parameters are provided
   const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
@@ -207,6 +286,14 @@ app.get('/getTop/', async function (req, res) {
   res.status(200).send(movies);
 });
 
+
+/**
+
+Retrieves the list of actors for a given movie ID from the moviedb API.
+@param {object} req - The HTTP request object.
+@param {object} res - The HTTP response object.
+@returns {void}
+*/
 
 app.get('/actors/:movie_id', (req, res) => {
   const MOVIEDB_API_KEY = process.env.movieDB_API_KEY
@@ -230,7 +317,16 @@ app.get('/actors/:movie_id', (req, res) => {
     res.send(JSON.stringify(actorList));
   });
 });
+/**
 
+Handle POST request to fetch movies by genre and page number.
+@param {Object} req - The request object.
+@param {Object} req.body - The request body containing genre_ids and page number.
+@param {number} req.body.genre_ids - The genre IDs of the movies to be fetched.
+@param {number} req.body.page - The page number of the movies to be fetched.
+@param {Object} res - The response object.
+@returns {Object} The response object with status and movie data.
+*/
 app.post('/tags', function (req, res) {
   const genre_id = req.body.genre_ids;
   const page_no = req.body.page;
@@ -274,6 +370,11 @@ Thriller        53
 War             10752
 Western         37
 */
+/**
+ * GET request to retrieve movie details based on query parameters.
+ * @param {string} req.params.query - Query parameter to search for movie details.
+ * @returns {Object} Movie details based on query parameters.
+ */
 app.get('/movies/:query', (req, res) => {
   const options = {
     method: 'GET',
@@ -292,7 +393,11 @@ app.get('/movies/:query', (req, res) => {
     console.error(error);
   });
 });
-
+/**
+ * GET request to retrieve search results based on query parameters.
+ * @param {string} req.params.movie_name - Query parameter to search for movies.
+ * @returns {Object} Movie search results based on query parameters.
+ */
 app.get('/search/:movie_name', async (req, res) => {
   const movie_name = req.params.movie_name;
   console.log(req.params.movie_name)
